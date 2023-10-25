@@ -163,16 +163,16 @@ ALTER TABLE ONLY public.kvartovi ALTER COLUMN id SET DEFAULT nextval('public.kva
 --
 
 COPY public.gradovi (id, imegrada, zupanija, gradonacelnik, brojstanovnika, povrsina, nadmorskavisina, godinaosnutka, latitude, longitude) FROM stdin;
-1	Zagreb	Grad Zagreb	Tomislav Tomašević	790017	641	122	1850	45.8150	15.9819
-2	Split	Splitsko-dalmatinska	Ivo Baldasar	178192	79	0	295	43.5081	16.4402
-3	Rijeka	Primorsko-goranska	Marko Filipović	128384	44	0	1288	45.3271	14.4422
-4	Osijek	Osječko-baranjska	Ivan Vrkić	108048	171	90	1687	45.5511	18.6932
-5	Zadar	Zadarska	Branko Dukić	75088	194	0	9	44.1194	15.2314
-6	Pula	Istarska	Filip Zoričić	57833	51	20	177	44.8666	13.8496
-7	Dubrovnik	Dubrovačko-neretvanska	Mato Franković	42890	21	0	7	42.6507	18.0944
-8	Varaždin	Varaždinska	Ivan Čehok	46498	63	177	1181	46.3038	16.3375
-9	Šibenik	Šibensko-kninska	Željko Burić	34368	51	0	1066	43.7357	15.8895
-10	Vukovar	Vukovarsko-srijemska	Ivan Penava	27711	74	91	1232	45.3464	18.9954
+1	Zagreb	Grad Zagreb	Tomislav Tomašević	777183	641.2	122	1094	45.8130	15.9775
+2	Split	Splitsko-dalmatinska	Ivica Puljak	162873	79	0	305	43.51	16.44
+3	Rijeka	Primorsko-goranska	Marko Filipović	109775	44	0	1139	45.33	14.44
+4	Osijek	Osječko-baranjska	Ivan Radić	97846	171	90	124	45.551	18.694
+5	Slavonski Brod	Brodsko-posavska	Mirko Duspara	51264	50.27	96	1224	45.16	18.01
+6	Požega	Požeško-slavonska	Željko Glavić	22564	133.91	152	1100	45.33	17.67
+7	Varaždin	Varaždinska	Neven Bosilj	44364	59.45	173	1181	46.31	16.33
+8	Pula	Istarska	Filip Zoričić	52920	51.65	30	-177	44.87	13.85
+9	Zadar	Zadarska	Marko Vučetić	71475	194	0	-59	44.12	15.24
+10	Dubrovnik	Dubrovačko-neretvanska	Mato Franković	42005	143.35	3	600	42.6402	18.1083
 \.
 
 
@@ -181,12 +181,16 @@ COPY public.gradovi (id, imegrada, zupanija, gradonacelnik, brojstanovnika, povr
 --
 
 COPY public.kvartovi (id, gradid, nazivkvarta, brojstanovnika) FROM stdin;
-1	1	Donji Grad	45000
-2	1	Trešnjevka	65000
-3	1	Novi Zagreb	70000
-4	2	Split-Centar	25000
-5	2	Split-Sjever	35000
-6	2	Split-Jug	45000
+1	1	Gornja Dubrava	58908
+2	1	Maksimir	47989
+3	1	Trešnjevka	119475
+4	2	Bol	11550
+5	2	Sućidar	10720
+6	3	Zamet	7765
+7	3	Sveti Nikola	7502
+8	4	Tvrđa	10277
+9	6	Sajmište	5432
+10	7	Hrašćica	1283
 \.
 
 
@@ -201,7 +205,7 @@ SELECT pg_catalog.setval('public.gradovi_id_seq', 10, true);
 -- Name: kvartovi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.kvartovi_id_seq', 6, true);
+SELECT pg_catalog.setval('public.kvartovi_id_seq', 10, true);
 
 
 --

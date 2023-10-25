@@ -1,15 +1,15 @@
 gradid,imegrada,zupanija,gradonacelnik,brojstanovnika,povrsina,godinaosnutka,latitude,longitude,nadmorskavisina,nazivkvarta,brojkvartstan
-1,Zagreb,Grad Zagreb,Tomislav Tomašević,790017,641,1850,45.8150,15.9819,122,Donji Grad,45000
-1,Zagreb,Grad Zagreb,Tomislav Tomašević,790017,641,1850,45.8150,15.9819,122,Trešnjevka,65000
-1,Zagreb,Grad Zagreb,Tomislav Tomašević,790017,641,1850,45.8150,15.9819,122,Novi Zagreb,70000
-2,Split,Splitsko-dalmatinska,Ivo Baldasar,178192,79,295,43.5081,16.4402,0,Split-Centar,25000
-2,Split,Splitsko-dalmatinska,Ivo Baldasar,178192,79,295,43.5081,16.4402,0,Split-Sjever,35000
-2,Split,Splitsko-dalmatinska,Ivo Baldasar,178192,79,295,43.5081,16.4402,0,Split-Jug,45000
-10,Vukovar,Vukovarsko-srijemska,Ivan Penava,27711,74,1232,45.3464,18.9954,91,,
-5,Zadar,Zadarska,Branko Dukić,75088,194,9,44.1194,15.2314,0,,
-8,Varaždin,Varaždinska,Ivan Čehok,46498,63,1181,46.3038,16.3375,177,,
-6,Pula,Istarska,Filip Zoričić,57833,51,177,44.8666,13.8496,20,,
-4,Osijek,Osječko-baranjska,Ivan Vrkić,108048,171,1687,45.5511,18.6932,90,,
-3,Rijeka,Primorsko-goranska,Marko Filipović,128384,44,1288,45.3271,14.4422,0,,
-9,Šibenik,Šibensko-kninska,Željko Burić,34368,51,1066,43.7357,15.8895,0,,
-7,Dubrovnik,Dubrovačko-neretvanska,Mato Franković,42890,21,7,42.6507,18.0944,0,,
+1,Zagreb,Grad Zagreb,Tomislav Tomašević,777183,641.2,1094,45.8130,15.9775,122,Gornja Dubrava,58908
+1,Zagreb,Grad Zagreb,Tomislav Tomašević,777183,641.2,1094,45.8130,15.9775,122,Maksimir,47989
+1,Zagreb,Grad Zagreb,Tomislav Tomašević,777183,641.2,1094,45.8130,15.9775,122,Trešnjevka,119475
+2,Split,Splitsko-dalmatinska,Ivica Puljak,162873,79,305,43.51,16.44,0,Bol,11550
+2,Split,Splitsko-dalmatinska,Ivica Puljak,162873,79,305,43.51,16.44,0,Sućidar,10720
+3,Rijeka,Primorsko-goranska,Marko Filipović,109775,44,1139,45.33,14.44,0,Zamet,7765
+3,Rijeka,Primorsko-goranska,Marko Filipović,109775,44,1139,45.33,14.44,0,Sveti Nikola,7502
+4,Osijek,Osječko-baranjska,Ivan Radić,97846,171,124,45.551,18.694,90,Tvrđa,10277
+6,Požega,Požeško-slavonska,Željko Glavić,22564,133.91,1100,45.33,17.67,152,Sajmište,5432
+7,Varaždin,Varaždinska,Neven Bosilj,44364,59.45,1181,46.31,16.33,173,Hrašćica,1283
+10,Dubrovnik,Dubrovačko-neretvanska,Mato Franković,42005,143.35,600,42.6402,18.1083,3,,
+5,Slavonski Brod,Brodsko-posavska,Mirko Duspara,51264,50.27,1224,45.16,18.01,96,,
+8,Pula,Istarska,Filip Zoričić,52920,51.65,-177,44.87,13.85,30,,
+9,Zadar,Zadarska,Marko Vučetić,71475,194,-59,44.12,15.24,0,,
