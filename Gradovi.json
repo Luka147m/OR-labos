@@ -1,1 +1,158 @@
-[]
+[
+  {
+    "gradid": 1,
+    "imegrada": "Zagreb",
+    "zupanija": "Grad Zagreb",
+    "gradonacelnik": "Tomislav Toma\u0161evi\u0107",
+    "brojstanovnika": 790017,
+    "povrsina": 641.0,
+    "godinaosnutka": 1850,
+    "latitude": 45.815,
+    "longitude": 15.9819,
+    "nadmorskavisina": 122,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Donji Grad",
+        "brojkvartstan": 45000
+      },
+      {
+        "nazivkvarta": "Tre\u0161njevka",
+        "brojkvartstan": 65000
+      },
+      {
+        "nazivkvarta": "Novi Zagreb",
+        "brojkvartstan": 70000
+      }
+    ]
+  },
+  {
+    "gradid": 2,
+    "imegrada": "Split",
+    "zupanija": "Splitsko-dalmatinska",
+    "gradonacelnik": "Ivo Baldasar",
+    "brojstanovnika": 178192,
+    "povrsina": 79.0,
+    "godinaosnutka": 295,
+    "latitude": 43.5081,
+    "longitude": 16.4402,
+    "nadmorskavisina": 0,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Split-Centar",
+        "brojkvartstan": 25000
+      },
+      {
+        "nazivkvarta": "Split-Sjever",
+        "brojkvartstan": 35000
+      },
+      {
+        "nazivkvarta": "Split-Jug",
+        "brojkvartstan": 45000
+      }
+    ]
+  },
+  {
+    "gradid": 10,
+    "imegrada": "Vukovar",
+    "zupanija": "Vukovarsko-srijemska",
+    "gradonacelnik": "Ivan Penava",
+    "brojstanovnika": 27711,
+    "povrsina": 74.0,
+    "godinaosnutka": 1232,
+    "latitude": 45.3464,
+    "longitude": 18.9954,
+    "nadmorskavisina": 91,
+    "kvartovi": []
+  },
+  {
+    "gradid": 5,
+    "imegrada": "Zadar",
+    "zupanija": "Zadarska",
+    "gradonacelnik": "Branko Duki\u0107",
+    "brojstanovnika": 75088,
+    "povrsina": 194.0,
+    "godinaosnutka": 9,
+    "latitude": 44.1194,
+    "longitude": 15.2314,
+    "nadmorskavisina": 0,
+    "kvartovi": []
+  },
+  {
+    "gradid": 8,
+    "imegrada": "Vara\u017edin",
+    "zupanija": "Vara\u017edinska",
+    "gradonacelnik": "Ivan \u010cehok",
+    "brojstanovnika": 46498,
+    "povrsina": 63.0,
+    "godinaosnutka": 1181,
+    "latitude": 46.3038,
+    "longitude": 16.3375,
+    "nadmorskavisina": 177,
+    "kvartovi": []
+  },
+  {
+    "gradid": 6,
+    "imegrada": "Pula",
+    "zupanija": "Istarska",
+    "gradonacelnik": "Filip Zori\u010di\u0107",
+    "brojstanovnika": 57833,
+    "povrsina": 51.0,
+    "godinaosnutka": 177,
+    "latitude": 44.8666,
+    "longitude": 13.8496,
+    "nadmorskavisina": 20,
+    "kvartovi": []
+  },
+  {
+    "gradid": 4,
+    "imegrada": "Osijek",
+    "zupanija": "Osje\u010dko-baranjska",
+    "gradonacelnik": "Ivan Vrki\u0107",
+    "brojstanovnika": 108048,
+    "povrsina": 171.0,
+    "godinaosnutka": 1687,
+    "latitude": 45.5511,
+    "longitude": 18.6932,
+    "nadmorskavisina": 90,
+    "kvartovi": []
+  },
+  {
+    "gradid": 3,
+    "imegrada": "Rijeka",
+    "zupanija": "Primorsko-goranska",
+    "gradonacelnik": "Marko Filipovi\u0107",
+    "brojstanovnika": 128384,
+    "povrsina": 44.0,
+    "godinaosnutka": 1288,
+    "latitude": 45.3271,
+    "longitude": 14.4422,
+    "nadmorskavisina": 0,
+    "kvartovi": []
+  },
+  {
+    "gradid": 9,
+    "imegrada": "\u0160ibenik",
+    "zupanija": "\u0160ibensko-kninska",
+    "gradonacelnik": "\u017deljko Buri\u0107",
+    "brojstanovnika": 34368,
+    "povrsina": 51.0,
+    "godinaosnutka": 1066,
+    "latitude": 43.7357,
+    "longitude": 15.8895,
+    "nadmorskavisina": 0,
+    "kvartovi": []
+  },
+  {
+    "gradid": 7,
+    "imegrada": "Dubrovnik",
+    "zupanija": "Dubrova\u010dko-neretvanska",
+    "gradonacelnik": "Mato Frankovi\u0107",
+    "brojstanovnika": 42890,
+    "povrsina": 21.0,
+    "godinaosnutka": 7,
+    "latitude": 42.6507,
+    "longitude": 18.0944,
+    "nadmorskavisina": 0,
+    "kvartovi": []
+  }
+]

@@ -1,4 +1,15 @@
-id,ime,zupanija,brojstanovnika,povrsina,nadmorskavisina,godinaosnutka,zemljopisnasirina,zemljopisnaduzina
-1,Zagreb,Grad Zagreb,803000,641.36,122,1850,45.815011,15.981919
-2,Split,Splitsko-dalmatinska,178102,79.38,0,295,43.508133,16.442957
-3,Rijeka,Primorsko-goranska,128384,44.21,0,1288,45.327647,14.442858
+gradid,imegrada,zupanija,gradonacelnik,brojstanovnika,povrsina,godinaosnutka,latitude,longitude,nadmorskavisina,nazivkvarta,brojkvartstan
+1,Zagreb,Grad Zagreb,Tomislav Tomašević,790017,641,1850,45.8150,15.9819,122,Donji Grad,45000
+1,Zagreb,Grad Zagreb,Tomislav Tomašević,790017,641,1850,45.8150,15.9819,122,Trešnjevka,65000
+1,Zagreb,Grad Zagreb,Tomislav Tomašević,790017,641,1850,45.8150,15.9819,122,Novi Zagreb,70000
+2,Split,Splitsko-dalmatinska,Ivo Baldasar,178192,79,295,43.5081,16.4402,0,Split-Centar,25000
+2,Split,Splitsko-dalmatinska,Ivo Baldasar,178192,79,295,43.5081,16.4402,0,Split-Sjever,35000
+2,Split,Splitsko-dalmatinska,Ivo Baldasar,178192,79,295,43.5081,16.4402,0,Split-Jug,45000
+10,Vukovar,Vukovarsko-srijemska,Ivan Penava,27711,74,1232,45.3464,18.9954,91,,
+5,Zadar,Zadarska,Branko Dukić,75088,194,9,44.1194,15.2314,0,,
+8,Varaždin,Varaždinska,Ivan Čehok,46498,63,1181,46.3038,16.3375,177,,
+6,Pula,Istarska,Filip Zoričić,57833,51,177,44.8666,13.8496,20,,
+4,Osijek,Osječko-baranjska,Ivan Vrkić,108048,171,1687,45.5511,18.6932,90,,
+3,Rijeka,Primorsko-goranska,Marko Filipović,128384,44,1288,45.3271,14.4422,0,,
+9,Šibenik,Šibensko-kninska,Željko Burić,34368,51,1066,43.7357,15.8895,0,,
+7,Dubrovnik,Dubrovačko-neretvanska,Mato Franković,42890,21,7,42.6507,18.0944,0,,

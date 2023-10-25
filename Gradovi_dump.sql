@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.2
--- Dumped by pg_dump version 15.2
+-- Dumped from database version 16.0
+-- Dumped by pg_dump version 16.0
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,14 +26,15 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.gradovi (
     id integer NOT NULL,
-    ime character varying(255) NOT NULL,
-    zupanija character varying(255) NOT NULL,
+    imegrada character varying(255) NOT NULL,
+    zupanija character varying(255),
+    gradonacelnik character varying(255),
     brojstanovnika integer,
-    povrsina numeric(10,2),
+    povrsina numeric,
     nadmorskavisina integer,
     godinaosnutka integer,
-    zemljopisnasirina numeric(8,6),
-    zemljopisnaduzina numeric(9,6)
+    latitude numeric,
+    longitude numeric
 );
 
 
@@ -52,7 +53,7 @@ CREATE SEQUENCE public.gradovi_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.gradovi_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.gradovi_id_seq OWNER TO postgres;
 
 --
 -- Name: gradovi_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -67,12 +68,59 @@ ALTER SEQUENCE public.gradovi_id_seq OWNED BY public.gradovi.id;
 
 CREATE TABLE public.kvartovi (
     id integer NOT NULL,
-    ime character varying(255) NOT NULL,
-    gradid integer
+    gradid integer,
+    nazivkvarta character varying(255) NOT NULL,
+    brojstanovnika integer
 );
 
 
 ALTER TABLE public.kvartovi OWNER TO postgres;
+
+--
+-- Name: gradovi_kvartovi; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.gradovi_kvartovi AS
+ SELECT gradovi.id AS gradid,
+    gradovi.imegrada,
+    gradovi.zupanija,
+    gradovi.gradonacelnik,
+    gradovi.brojstanovnika,
+    gradovi.povrsina,
+    gradovi.godinaosnutka,
+    gradovi.latitude,
+    gradovi.longitude,
+    gradovi.nadmorskavisina,
+    kvartovi.nazivkvarta,
+    kvartovi.brojstanovnika AS brojkvartstan
+   FROM (public.gradovi
+     LEFT JOIN public.kvartovi ON ((gradovi.id = kvartovi.gradid)));
+
+
+ALTER VIEW public.gradovi_kvartovi OWNER TO postgres;
+
+--
+-- Name: gradovi_kvartovi_view; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.gradovi_kvartovi_view AS
+ SELECT gradovi.id AS gradid,
+    gradovi.imegrada,
+    gradovi.zupanija,
+    gradovi.gradonacelnik,
+    gradovi.brojstanovnika,
+    gradovi.povrsina,
+    gradovi.godinaosnutka,
+    gradovi.latitude,
+    gradovi.longitude,
+    gradovi.nadmorskavisina,
+    kvartovi.nazivkvarta,
+    kvartovi.brojstanovnika AS brojkvartstan
+   FROM (public.gradovi
+     LEFT JOIN public.kvartovi ON ((gradovi.id = kvartovi.gradid)));
+
+
+ALTER VIEW public.gradovi_kvartovi_view OWNER TO postgres;
 
 --
 -- Name: kvartovi_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -87,7 +135,7 @@ CREATE SEQUENCE public.kvartovi_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.kvartovi_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.kvartovi_id_seq OWNER TO postgres;
 
 --
 -- Name: kvartovi_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -114,10 +162,17 @@ ALTER TABLE ONLY public.kvartovi ALTER COLUMN id SET DEFAULT nextval('public.kva
 -- Data for Name: gradovi; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.gradovi (id, ime, zupanija, brojstanovnika, povrsina, nadmorskavisina, godinaosnutka, zemljopisnasirina, zemljopisnaduzina) FROM stdin;
-1	Zagreb	Grad Zagreb	803000	641.36	122	1850	45.815011	15.981919
-2	Split	Splitsko-dalmatinska	178102	79.38	0	295	43.508133	16.442957
-3	Rijeka	Primorsko-goranska	128384	44.21	0	1288	45.327647	14.442858
+COPY public.gradovi (id, imegrada, zupanija, gradonacelnik, brojstanovnika, povrsina, nadmorskavisina, godinaosnutka, latitude, longitude) FROM stdin;
+1	Zagreb	Grad Zagreb	Tomislav Tomašević	790017	641	122	1850	45.8150	15.9819
+2	Split	Splitsko-dalmatinska	Ivo Baldasar	178192	79	0	295	43.5081	16.4402
+3	Rijeka	Primorsko-goranska	Marko Filipović	128384	44	0	1288	45.3271	14.4422
+4	Osijek	Osječko-baranjska	Ivan Vrkić	108048	171	90	1687	45.5511	18.6932
+5	Zadar	Zadarska	Branko Dukić	75088	194	0	9	44.1194	15.2314
+6	Pula	Istarska	Filip Zoričić	57833	51	20	177	44.8666	13.8496
+7	Dubrovnik	Dubrovačko-neretvanska	Mato Franković	42890	21	0	7	42.6507	18.0944
+8	Varaždin	Varaždinska	Ivan Čehok	46498	63	177	1181	46.3038	16.3375
+9	Šibenik	Šibensko-kninska	Željko Burić	34368	51	0	1066	43.7357	15.8895
+10	Vukovar	Vukovarsko-srijemska	Ivan Penava	27711	74	91	1232	45.3464	18.9954
 \.
 
 
@@ -125,11 +180,13 @@ COPY public.gradovi (id, ime, zupanija, brojstanovnika, povrsina, nadmorskavisin
 -- Data for Name: kvartovi; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.kvartovi (id, ime, gradid) FROM stdin;
-1	Donja Dubrava	1
-2	Stari Grad	1
-3	Pazdigrad	2
-4	Brajda-Đardin	3
+COPY public.kvartovi (id, gradid, nazivkvarta, brojstanovnika) FROM stdin;
+1	1	Donji Grad	45000
+2	1	Trešnjevka	65000
+3	1	Novi Zagreb	70000
+4	2	Split-Centar	25000
+5	2	Split-Sjever	35000
+6	2	Split-Jug	45000
 \.
 
 
@@ -137,14 +194,14 @@ COPY public.kvartovi (id, ime, gradid) FROM stdin;
 -- Name: gradovi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.gradovi_id_seq', 3, true);
+SELECT pg_catalog.setval('public.gradovi_id_seq', 10, true);
 
 
 --
 -- Name: kvartovi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.kvartovi_id_seq', 4, true);
+SELECT pg_catalog.setval('public.kvartovi_id_seq', 6, true);
 
 
 --
