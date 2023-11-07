@@ -1,22 +1,26 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 
-const { Pool } = require("pg");
+const { Pool } = require('pg');
 
 const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "Gradovi",
-    password: "admin",
-    port: 5432,
+  user: 'postgres',
+  host: 'localhost',
+  database: 'Gradovi',
+  password: 'admin',
+  port: 5432,
 });
 
-app.get("/", (req, res) => {
-    res.setHeader("Content-Type", "text/html");
-    res.writeHead(200);
-    res.end(`<html><body><h1>Server</h1></body></html>`);
-})
+app.get('/getJson', async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT * FROM gradovijson`);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
 
 app.listen(8080, () => {
-    console.log("Server pokrenut na portu 8080");
+  console.log('Server pokrenut na portu 8080');
 });
