@@ -1,0 +1,178 @@
+[
+  {
+    "gradid": 1,
+    "imegrada": "Zagreb",
+    "zupanija": "Grad Zagreb",
+    "gradonacelnik": "Tomislav Tomašević",
+    "brojstanovnika": 777183,
+    "povrsina": 641.2,
+    "godinaosnutka": 1094,
+    "latitude": 45.813,
+    "longitude": 15.9775,
+    "nadmorskavisina": 122,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Gornja Dubrava",
+        "brojkvartstan": 58908
+      },
+      {
+        "nazivkvarta": "Maksimir",
+        "brojkvartstan": 47989
+      },
+      {
+        "nazivkvarta": "Trešnjevka",
+        "brojkvartstan": 119475
+      }
+    ]
+  },
+  {
+    "gradid": 2,
+    "imegrada": "Split",
+    "zupanija": "Splitsko-dalmatinska",
+    "gradonacelnik": "Ivica Puljak",
+    "brojstanovnika": 162873,
+    "povrsina": 79.0,
+    "godinaosnutka": 305,
+    "latitude": 43.51,
+    "longitude": 16.44,
+    "nadmorskavisina": 0,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Bol",
+        "brojkvartstan": 11550
+      },
+      {
+        "nazivkvarta": "Sućidar",
+        "brojkvartstan": 10720
+      }
+    ]
+  },
+  {
+    "gradid": 3,
+    "imegrada": "Rijeka",
+    "zupanija": "Primorsko-goranska",
+    "gradonacelnik": "Marko Filipović",
+    "brojstanovnika": 109775,
+    "povrsina": 44.0,
+    "godinaosnutka": 1139,
+    "latitude": 45.33,
+    "longitude": 14.44,
+    "nadmorskavisina": 0,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Zamet",
+        "brojkvartstan": 7765
+      },
+      {
+        "nazivkvarta": "Sveti Nikola",
+        "brojkvartstan": 7502
+      }
+    ]
+  },
+  {
+    "gradid": 4,
+    "imegrada": "Osijek",
+    "zupanija": "Osječko-baranjska",
+    "gradonacelnik": "Ivan Radić",
+    "brojstanovnika": 97846,
+    "povrsina": 171.0,
+    "godinaosnutka": 124,
+    "latitude": 45.551,
+    "longitude": 18.694,
+    "nadmorskavisina": 90,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Tvrđa",
+        "brojkvartstan": 10277
+      }
+    ]
+  },
+  {
+    "gradid": 6,
+    "imegrada": "Požega",
+    "zupanija": "Požeško-slavonska",
+    "gradonacelnik": "Željko Glavić",
+    "brojstanovnika": 22564,
+    "povrsina": 133.91,
+    "godinaosnutka": 1100,
+    "latitude": 45.33,
+    "longitude": 17.67,
+    "nadmorskavisina": 152,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Sajmište",
+        "brojkvartstan": 5432
+      }
+    ]
+  },
+  {
+    "gradid": 7,
+    "imegrada": "Varaždin",
+    "zupanija": "Varaždinska",
+    "gradonacelnik": "Neven Bosilj",
+    "brojstanovnika": 44364,
+    "povrsina": 59.45,
+    "godinaosnutka": 1181,
+    "latitude": 46.31,
+    "longitude": 16.33,
+    "nadmorskavisina": 173,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Hrašćica",
+        "brojkvartstan": 1283
+      }
+    ]
+  },
+  {
+    "gradid": 10,
+    "imegrada": "Dubrovnik",
+    "zupanija": "Dubrovačko-neretvanska",
+    "gradonacelnik": "Mato Franković",
+    "brojstanovnika": 42005,
+    "povrsina": 143.35,
+    "godinaosnutka": 600,
+    "latitude": 42.6402,
+    "longitude": 18.1083,
+    "nadmorskavisina": 3,
+    "kvartovi": []
+  },
+  {
+    "gradid": 5,
+    "imegrada": "Slavonski Brod",
+    "zupanija": "Brodsko-posavska",
+    "gradonacelnik": "Mirko Duspara",
+    "brojstanovnika": 51264,
+    "povrsina": 50.27,
+    "godinaosnutka": 1224,
+    "latitude": 45.16,
+    "longitude": 18.01,
+    "nadmorskavisina": 96,
+    "kvartovi": []
+  },
+  {
+    "gradid": 8,
+    "imegrada": "Pula",
+    "zupanija": "Istarska",
+    "gradonacelnik": "Filip Zoričić",
+    "brojstanovnika": 52920,
+    "povrsina": 51.65,
+    "godinaosnutka": -177,
+    "latitude": 44.87,
+    "longitude": 13.85,
+    "nadmorskavisina": 30,
+    "kvartovi": []
+  },
+  {
+    "gradid": 9,
+    "imegrada": "Zadar",
+    "zupanija": "Zadarska",
+    "gradonacelnik": "Marko Vučetić",
+    "brojstanovnika": 71475,
+    "povrsina": 194.0,
+    "godinaosnutka": -59,
+    "latitude": 44.12,
+    "longitude": 15.24,
+    "nadmorskavisina": 0,
+    "kvartovi": []
+  }
+]

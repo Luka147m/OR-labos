@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
+import exportFromJSON from 'export-from-json';
 
 import DataTable from 'react-data-table-component';
 
@@ -59,10 +60,20 @@ const columns = [
     selector: (row) => row.nadmorskavisina,
     sortable: true,
   },
+  {
+    name: 'Kvart',
+    selector: (row) => row.nazivkvarta,
+    sortable: true,
+  },
+  {
+    name: 'Broj stanovnika kvarta',
+    selector: (row) => row.brojkvartstan,
+    sortable: true,
+  },
 ];
 
 const Datatable = () => {
-  const [selectedField, setSelectedField] = useState('');
+  const [selectedField, setSelectedField] = useState('sve');
   const [searchInput, setSearchInput] = useState('');
   const [data, setData] = useState([]);
 
@@ -76,8 +87,18 @@ const Datatable = () => {
 
   const bntPressed = () => {
     const apiUrl = `/getJson`;
+    const requestData = {
+      searchInput: searchInput,
+      selectedField: selectedField,
+    };
 
-    fetch(apiUrl)
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData),
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -85,12 +106,62 @@ const Datatable = () => {
         return response.json();
       })
       .then((fetchedData) => {
-        setData(fetchedData[0].json_agg);
-        console.log(data);
+        setData(fetchedData);
+        //console.log(fetchedData);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
+  };
+
+  const exportCSV = () => {
+    const fileName = 'Gradovi';
+    const exportType = exportFromJSON.types.csv;
+    exportFromJSON({ data, fileName, exportType });
+  };
+
+  const exportJSON = () => {
+    const formattedJSON = data.reduce((acc, current) => {
+      const postojiGrad = acc.find((grad) => grad.gradid === current.gradid);
+
+      if (postojiGrad) {
+        if (current.nazivkvarta) {
+          postojiGrad.kvartovi.push({
+            nazivkvarta: current.nazivkvarta,
+            brojkvartstan: current.brojkvartstan,
+          });
+        }
+      } else {
+        const noviGrad = {
+          gradid: current.gradid,
+          imegrada: current.imegrada,
+          zupanija: current.zupanija,
+          gradonacelnik: current.gradonacelnik,
+          brojstanovnika: current.brojstanovnika,
+          povrsina: parseFloat(current.povrsina),
+          godinaosnutka: current.godinaosnutka,
+          latitude: parseFloat(current.latitude),
+          longitude: parseFloat(current.longitude),
+          nadmorskavisina: current.nadmorskavisina,
+          kvartovi: [],
+        };
+
+        if (current.nazivkvarta) {
+          noviGrad.kvartovi.push({
+            nazivkvarta: current.nazivkvarta,
+            brojkvartstan: current.brojkvartstan,
+          });
+        }
+
+        acc.push(noviGrad);
+      }
+
+      return acc;
+    }, []);
+
+    const fileName = 'Gradovi';
+    const exportType = exportFromJSON.types.json;
+    exportFromJSON({ data: formattedJSON, fileName, exportType });
   };
 
   return (
@@ -116,7 +187,7 @@ const Datatable = () => {
             value={searchInput}
             onChange={handleInputChange}
           />
-          <label style={{ color: 'grey' }}>
+          <label style={{ color: 'grey', fontSize: '12px' }}>
             Po ovoj vrijednosti će se pretraživati podaci.
           </label>
         </div>
@@ -134,17 +205,23 @@ const Datatable = () => {
           <option value='godina'>Godina osnutka</option>
           <option value='latitude'>Zemljopisna širina</option>
           <option value='longitude'>Zemljopisna visina</option>
-          <option value='kvartovi'>Kvartovi</option>
+          <option value='nadmorska'>Nadmorska visina</option>
+          <option value='kvart'>Naziv kvarta</option>
+          <option value='kvartbroj'>Broj stanovnika kvarta</option>
         </select>
         <button className='btn' onClick={bntPressed}>
           Pretraži
         </button>
+        <button onClick={exportCSV}>Generiraj CSV</button>
+        <button onClick={exportJSON}>Generiraj JSON</button>
       </div>
       <DataTable
         columns={columns}
         data={data}
-        noDataComponent='Pretraži da prikažeš rezultat'
+        noDataComponent='Pretraži da prikažeš rezultat/nema rezultata'
         customStyles={customStyles}
+        pagination
+        striped
       />
     </div>
   );
