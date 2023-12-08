@@ -1,10 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/Luka147m/OR-labos/blob/main/backend/addRequestSchema.json",
+  "$id": "https://github.com/Luka147m/OR-labos/blob/main/backend/updateRequestSchema.json",
   "title": "Add request",
   "description": "Schema za validaciju add requesta",
   "type": "object",
-  "required": [ "imegrada", "zupanija", "gradonacelnik", "brojstanovnika", "povrsina", "godinaosnutka", "latitude", "longitude", "nadmorskavisina", "kvartovi" ],
   "additionalProperties": false,
   "properties": {
     "imegrada": {

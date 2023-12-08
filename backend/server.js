@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const { body, validationResult } = require('express-validator');
 const Ajv = require('ajv');
 const ajv = new Ajv();
 
@@ -9,6 +8,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const addRequestSchema = require('./addRequestSchema.json');
+const updateRequestSchema = require('./updateRequestSchema.json');
 
 const { Pool } = require('pg');
 
@@ -27,6 +27,7 @@ function wrapResponse(req, res, next) {
       message,
       response: data,
     };
+    res.setHeader('Content-Type', 'application/json');
     res.json(response);
   };
   next();
@@ -41,7 +42,28 @@ const validateRequestBody = (req, res, next) => {
   if (!valid) {
     return res
       .status(400)
-      .wrapResponse('Bad Request', 'Request failed schema validation ()', null);
+      .sendWrapper(
+        'Bad Request',
+        'Request failed schema validation (https://github.com/Luka147m/OR-labos/blob/main/backend/addRequestSchema.json)',
+        null
+      );
+  }
+
+  next();
+};
+
+const validateUpdateRequestBody = (req, res, next) => {
+  const validate = ajv.compile(updateRequestSchema);
+  const valid = validate(req.body);
+
+  if (!valid) {
+    return res
+      .status(400)
+      .sendWrapper(
+        'Bad Request',
+        'Request failed schema validation (https://github.com/Luka147m/OR-labos/blob/main/backend/updateRequestSchema.json)',
+        null
+      );
   }
 
   next();
@@ -168,7 +190,7 @@ app.get('/api/get/:id', async (req, res) => {
 });
 
 app.get('/api/getCity/:id', async (req, res) => {
-  const Id = req.params.id;
+  const id = req.params.id;
 });
 
 app.post('/api/add', validateRequestBody, async (req, res) => {
@@ -224,13 +246,92 @@ app.post('/api/add', validateRequestBody, async (req, res) => {
     }
   });
 
-  res.sendWrapper('OK', `Entry added successfully with id: ${id}`, null);
+  try {
+    const result = await pool.query(`SELECT getGradById(${id})`);
+    res
+      .status(200)
+      .sendWrapper(
+        'OK',
+        `Entry added successfully with id: ${id}`,
+        result.rows[0].getgradbyid
+      );
+  } catch (error) {
+    console.error('Error executing query', error);
+    res
+      .status(500)
+      .sendWrapper(
+        'Internal server error',
+        'Unable to retrieve data from database',
+        null
+      );
+  }
 });
 
-app.put('/api/modify', async (req, res) => {});
+app.put('/api/modify/:id', validateUpdateRequestBody, async (req, res) => {
+  const id = req.params.id;
+  var query = `UPDATE gradovi
+  SET `;
+
+  Object.keys(req.body).forEach((key) => {
+    if (key == 'kvartovi') return;
+    const value =
+      typeof req.body[key] === 'string' ? `'${req.body[key]}'` : req.body[key];
+    query += `${key} = ${value}, `;
+  });
+  query = query.replace(/,\s*$/, '');
+  query += ` WHERE id = ${id};`;
+
+  try {
+    const result = await pool.query(query);
+    if (result.rowCount == 0) {
+      res
+        .status(404)
+        .sendWrapper('OK', `Entry with id: ${id} has not been found`, null);
+    } else {
+      res
+        .status(200)
+        .sendWrapper('OK', `Entry with id: ${id} has been updated`, null);
+    }
+  } catch (error) {
+    console.error('Error executing query', error);
+    res
+      .status(500)
+      .sendWrapper(
+        'Internal server error',
+        'Unable to delete data from database',
+        null
+      );
+  }
+});
 
 app.delete('/api/delete/:id', async (req, res) => {
-  const Id = req.params.id;
+  const id = req.params.id;
+  var query = `DELETE FROM gradovi WHERE id = ${id}`;
+  try {
+    await pool.query(query);
+  } catch (error) {
+    console.error('Error executing query', error);
+    res
+      .status(500)
+      .sendWrapper(
+        'Internal server error',
+        'Unable to delete data from database',
+        null
+      );
+  }
+  res
+    .status(200)
+    .sendWrapper('OK', `Deleted entry with id: ${id} from database`, null);
+});
+
+app.get('*', function (req, res) {
+  res
+    .status(501)
+    .sendWrapper(
+      'Not implemented',
+      `Method ${req.method} for route ${req.url} has not been implemented yet`,
+      null
+    );
 });
 
 app.listen(8080, () => {
