@@ -1,9 +1,14 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const { body, validationResult } = require('express-validator');
+const Ajv = require('ajv');
+const ajv = new Ajv();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+const addRequestSchema = require('./addRequestSchema.json');
 
 const { Pool } = require('pg');
 
@@ -28,6 +33,19 @@ function wrapResponse(req, res, next) {
 }
 
 app.use(wrapResponse);
+
+const validateRequestBody = (req, res, next) => {
+  const validate = ajv.compile(addRequestSchema);
+  const valid = validate(req.body);
+
+  if (!valid) {
+    return res
+      .status(400)
+      .wrapResponse('Bad Request', 'Request failed schema validation ()', null);
+  }
+
+  next();
+};
 
 app.post('/getJson', async (req, res) => {
   const { searchInput, selectedField } = req.body;
@@ -153,7 +171,61 @@ app.get('/api/getCity/:id', async (req, res) => {
   const Id = req.params.id;
 });
 
-app.post('/api/add', async (req, res) => {});
+app.post('/api/add', validateRequestBody, async (req, res) => {
+  var id;
+  var queryGradovi = `INSERT INTO gradovi (
+    imegrada, zupanija, gradonacelnik, brojstanovnika,
+    povrsina, nadmorskavisina, godinaosnutka, latitude, longitude
+    ) VALUES (
+      '${req.body.imegrada}',
+      '${req.body.zupanija}',
+      '${req.body.gradonacelnik}',
+      ${req.body.brojstanovnika},
+      ${req.body.povrsina},
+      ${req.body.nadmorskavisina},
+      ${req.body.godinaosnutka},
+      ${req.body.latitude},
+      ${req.body.longitude}
+    ) RETURNING id;`;
+
+  try {
+    const result = await pool.query(queryGradovi);
+    id = result.rows[0].id;
+  } catch (error) {
+    console.error('Error executing query', error);
+    res
+      .status(500)
+      .sendWrapper(
+        'Internal server error',
+        'Unable to retrieve data from database',
+        null
+      );
+  }
+
+  req.body.kvartovi.forEach((kvart) => {
+    var queryKvartovi = `INSERT INTO kvartovi (gradid, nazivkvarta, brojstanovnika) 
+    VALUES ( 
+      ${id},
+      '${kvart.nazivkvarta}',
+      ${kvart.brojkvartstan}
+    )`;
+
+    try {
+      pool.query(queryKvartovi);
+    } catch (error) {
+      console.error('Error executing query', error);
+      res
+        .status(500)
+        .sendWrapper(
+          'Internal server error',
+          'Unable to retrieve data from database',
+          null
+        );
+    }
+  });
+
+  res.sendWrapper('OK', `Entry added successfully with id: ${id}`, null);
+});
 
 app.put('/api/modify', async (req, res) => {});
 

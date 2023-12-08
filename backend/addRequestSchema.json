@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "",
+  "title": "Add request",
+  "description": "Schema za validaciju add requesta",
+  "type": "object",
+  "required": [ "imegrada", "zupanija", "gradonacelnik", "brojstanovnika", "povrsina", "godinaosnutka", "latitude", "longitude", "nadmorskavisina", "kvartovi" ],
+  "properties": {
+    "imegrada": {
+      "title": "imegrada",
+      "description": "Sadrži ime grada",
+      "type": "string"
+    },
+    "zupanija": {
+      "title": "zupanija",
+      "description": "Županija u kojoj se nalazi grad",
+      "type": "string"
+    },
+    "gradonacelnik": {
+      "title": "gradonacelnik",
+      "description": "Trenutni gradonačelnik",
+      "type": "string"
+    },
+    "brojstanovnika": {
+      "title": "brojstanovnika",
+      "description": "Broj stanovnika pojedinog grada",
+      "type": "integer"
+    },
+    "povrsina": {
+      "title": "povrsina",
+      "description": "Površina pod vlasništvom grada (u kilometrima kvadratnim)",
+      "type": "number"
+    },
+    "godinaosnutka": {
+      "title": "godinaosnutka",
+      "description": "Godina kada je grad osnovan (negativna godina predstavlja godinu prije krista)",
+      "type": "integer"
+    },
+    "latitude": {
+      "title": "latitude",
+      "description": "Zemljopisna širina grada",
+      "type": "number"
+    },
+    "longitude": {
+      "title": "longitude",
+      "description": "Zemljopisna visina grada",
+      "type": "number"
+    },
+    "nadmorskavisina": {
+      "title": "nadmorskavisina",
+      "description": "Nadmorska visina na kojoj se nalazi grad",
+      "type": "integer"
+    },
+    "kvartovi": {
+      "title": "kvartovi",
+      "description": "Popis kvartova grada",
+      "type": "array",
+      "items": {
+        "title": "Kvart",
+        "description": "Objekt koji sadrži informacije o kvartu",
+        "type": "object",
+        "required": [
+          "nazivkvarta",
+          "brojkvartstan"
+        ],
+        "properties": {
+          "nazivkvarta": {
+            "title": "nazivkvarta",
+            "description": "Naziv kvarta",
+            "type": "string"
+          },
+          "brojkvartstan": {
+            "title": "brojkvartstan",
+            "description": "Broj stanovnika u pojedinom kvartu",
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
