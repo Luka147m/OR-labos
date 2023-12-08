@@ -15,9 +15,22 @@ const pool = new Pool({
   port: 5432,
 });
 
+function wrapResponse(req, res, next) {
+  res.sendWrapper = (status, message, data) => {
+    const response = {
+      status,
+      message,
+      response: data,
+    };
+    res.json(response);
+  };
+  next();
+}
+
+app.use(wrapResponse);
+
 app.post('/getJson', async (req, res) => {
   const { searchInput, selectedField } = req.body;
-  //console.log(searchInput + ' ' + selectedField);
   var query = `SELECT * FROM gradovi_kvartovi WHERE `;
   switch (selectedField) {
     case 'sve':
@@ -68,7 +81,7 @@ app.post('/getJson', async (req, res) => {
       query += `CAST(brojkvartstan AS TEXT) LIKE '%${searchInput}%'`;
       break;
   }
-  //console.log(query);
+
   try {
     const result = await pool.query(query);
     res.json(result.rows);
@@ -76,6 +89,76 @@ app.post('/getJson', async (req, res) => {
     console.error('Error executing query', error);
     res.status(500).json({ error: 'An error occurred' });
   }
+});
+
+app.get('/api/getAll', async (req, res) => {
+  var query = `SELECT * FROM gradovijson`;
+  try {
+    const result = await pool.query(query);
+    res
+      .status(200)
+      .sendWrapper(
+        'OK',
+        'Fetched all entries from database',
+        result.rows[0].json_agg
+      );
+  } catch (error) {
+    console.error('Error executing query', error);
+    res
+      .status(500)
+      .sendWrapper(
+        'Internal server error',
+        'Unable to retrieve data from database',
+        null
+      );
+  }
+});
+
+app.get('/api/get/:id', async (req, res) => {
+  const id = req.params.id;
+  var query = `SELECT getGradById(${id})`;
+  try {
+    const result = await pool.query(query);
+
+    if (result.rows[0].getgradbyid == null) {
+      res
+        .status(404)
+        .sendWrapper(
+          'Not found',
+          `Failed to find entry matching the id: ${id}`,
+          result.rows[0].getgradbyid
+        );
+    } else {
+      res
+        .status(200)
+        .sendWrapper(
+          'OK',
+          `Fetched all entries from database matching the id: ${id}`,
+          result.rows[0].getgradbyid
+        );
+    }
+  } catch (error) {
+    console.error('Error executing query', error);
+    res
+      .status(500)
+      .sendWrapper(
+        'Internal server error',
+        'Unable to retrieve data from database',
+        null
+      );
+  }
+});
+
+app.get('/api/getCity/:id', async (req, res) => {
+  const Id = req.params.id;
+});
+
+app.post('/api/add', async (req, res) => {});
+
+app.put('/api/modify', async (req, res) => {});
+
+app.delete('/api/delete/:id', async (req, res) => {
+  const Id = req.params.id;
 });
 
 app.listen(8080, () => {

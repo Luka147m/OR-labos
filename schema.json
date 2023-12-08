@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2019-09/schema",
-    "$id": "http://example.com/example.json",
+    "$id": "https://github.com/Luka147m/OR-labos/blob/main/schema.json",
     "title": "OR gradovi",
     "description": "Labos iz predmeta Otvoreno Računarstvo\nSkup podataka o gradovima Hrvatske",
     "type": "array",
