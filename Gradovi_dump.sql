@@ -16,6 +16,47 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: getgradbyid(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.getgradbyid(city_id integer) RETURNS json
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    result_json JSON;
+BEGIN
+    SELECT json_agg(city_info) INTO result_json
+    FROM (
+        SELECT json_build_object(
+            'id', gradovi_kvartovi.gradid,
+            'imegrada', gradovi_kvartovi.imegrada,
+            'kvartovi',
+            CASE
+                WHEN count(gradovi_kvartovi.nazivkvarta) > 0 THEN json_agg(json_build_object('nazivkvarta', gradovi_kvartovi.nazivkvarta, 'brojkvartstan', gradovi_kvartovi.brojkvartstan))
+                ELSE '[]'::json
+            END,
+            'latitude', gradovi_kvartovi.latitude,
+            'povrsina', gradovi_kvartovi.povrsina,
+            'zupanija', gradovi_kvartovi.zupanija,
+            'longitude', gradovi_kvartovi.longitude,
+            'godinaosnutka', gradovi_kvartovi.godinaosnutka,
+            'gradonacelnik', gradovi_kvartovi.gradonacelnik,
+            'brojstanovnika', gradovi_kvartovi.brojstanovnika,
+            'nadmorskavisina', gradovi_kvartovi.nadmorskavisina
+        ) AS city_info
+        FROM gradovi_kvartovi
+        WHERE gradovi_kvartovi.gradid = city_id
+        GROUP BY gradovi_kvartovi.gradid, gradovi_kvartovi.imegrada, gradovi_kvartovi.latitude, gradovi_kvartovi.povrsina, gradovi_kvartovi.zupanija, gradovi_kvartovi.longitude, gradovi_kvartovi.godinaosnutka, gradovi_kvartovi.gradonacelnik, gradovi_kvartovi.brojstanovnika, gradovi_kvartovi.nadmorskavisina
+    ) subquery;
+
+    RETURN result_json;
+END;
+$$;
+
+
+ALTER FUNCTION public.getgradbyid(city_id integer) OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -100,27 +141,21 @@ CREATE VIEW public.gradovi_kvartovi AS
 ALTER VIEW public.gradovi_kvartovi OWNER TO postgres;
 
 --
--- Name: gradovi_kvartovi_view; Type: VIEW; Schema: public; Owner: postgres
+-- Name: gradovijson; Type: VIEW; Schema: public; Owner: postgres
 --
 
-CREATE VIEW public.gradovi_kvartovi_view AS
- SELECT gradovi.id AS gradid,
-    gradovi.imegrada,
-    gradovi.zupanija,
-    gradovi.gradonacelnik,
-    gradovi.brojstanovnika,
-    gradovi.povrsina,
-    gradovi.godinaosnutka,
-    gradovi.latitude,
-    gradovi.longitude,
-    gradovi.nadmorskavisina,
-    kvartovi.nazivkvarta,
-    kvartovi.brojstanovnika AS brojkvartstan
-   FROM (public.gradovi
-     LEFT JOIN public.kvartovi ON ((gradovi.id = kvartovi.gradid)));
+CREATE VIEW public.gradovijson AS
+ SELECT json_agg(city_info) AS json_agg
+   FROM ( SELECT json_build_object('id', gradovi_kvartovi.gradid, 'imegrada', gradovi_kvartovi.imegrada, 'kvartovi',
+                CASE
+                    WHEN (count(gradovi_kvartovi.nazivkvarta) > 0) THEN json_agg(json_build_object('nazivkvarta', gradovi_kvartovi.nazivkvarta, 'brojkvartstan', gradovi_kvartovi.brojkvartstan))
+                    ELSE '[]'::json
+                END, 'latitude', gradovi_kvartovi.latitude, 'povrsina', gradovi_kvartovi.povrsina, 'zupanija', gradovi_kvartovi.zupanija, 'longitude', gradovi_kvartovi.longitude, 'godinaosnutka', gradovi_kvartovi.godinaosnutka, 'gradonacelnik', gradovi_kvartovi.gradonacelnik, 'brojstanovnika', gradovi_kvartovi.brojstanovnika, 'nadmorskavisina', gradovi_kvartovi.nadmorskavisina) AS city_info
+           FROM public.gradovi_kvartovi
+          GROUP BY gradovi_kvartovi.gradid, gradovi_kvartovi.imegrada, gradovi_kvartovi.latitude, gradovi_kvartovi.povrsina, gradovi_kvartovi.zupanija, gradovi_kvartovi.longitude, gradovi_kvartovi.godinaosnutka, gradovi_kvartovi.gradonacelnik, gradovi_kvartovi.brojstanovnika, gradovi_kvartovi.nadmorskavisina) subquery;
 
 
-ALTER VIEW public.gradovi_kvartovi_view OWNER TO postgres;
+ALTER VIEW public.gradovijson OWNER TO postgres;
 
 --
 -- Name: kvartovi_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -163,7 +198,6 @@ ALTER TABLE ONLY public.kvartovi ALTER COLUMN id SET DEFAULT nextval('public.kva
 --
 
 COPY public.gradovi (id, imegrada, zupanija, gradonacelnik, brojstanovnika, povrsina, nadmorskavisina, godinaosnutka, latitude, longitude) FROM stdin;
-1	Zagreb	Grad Zagreb	Tomislav Tomašević	777183	641.2	122	1094	45.8130	15.9775
 2	Split	Splitsko-dalmatinska	Ivica Puljak	162873	79	0	305	43.51	16.44
 3	Rijeka	Primorsko-goranska	Marko Filipović	109775	44	0	1139	45.33	14.44
 4	Osijek	Osječko-baranjska	Ivan Radić	97846	171	90	124	45.551	18.694
@@ -173,6 +207,7 @@ COPY public.gradovi (id, imegrada, zupanija, gradonacelnik, brojstanovnika, povr
 8	Pula	Istarska	Filip Zoričić	52920	51.65	30	-177	44.87	13.85
 9	Zadar	Zadarska	Marko Vučetić	71475	194	0	-59	44.12	15.24
 10	Dubrovnik	Dubrovačko-neretvanska	Mato Franković	42005	143.35	3	600	42.6402	18.1083
+1	Zagreb	Grad Zagreb	Tomislav Tomašević	777183	641.2	122	1094	45.8130	15.9775
 \.
 
 
@@ -198,14 +233,14 @@ COPY public.kvartovi (id, gradid, nazivkvarta, brojstanovnika) FROM stdin;
 -- Name: gradovi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.gradovi_id_seq', 10, true);
+SELECT pg_catalog.setval('public.gradovi_id_seq', 17, true);
 
 
 --
 -- Name: kvartovi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.kvartovi_id_seq', 10, true);
+SELECT pg_catalog.setval('public.kvartovi_id_seq', 25, true);
 
 
 --
@@ -229,7 +264,7 @@ ALTER TABLE ONLY public.kvartovi
 --
 
 ALTER TABLE ONLY public.kvartovi
-    ADD CONSTRAINT kvartovi_gradid_fkey FOREIGN KEY (gradid) REFERENCES public.gradovi(id);
+    ADD CONSTRAINT kvartovi_gradid_fkey FOREIGN KEY (gradid) REFERENCES public.gradovi(id) ON DELETE CASCADE;
 
 
 --

@@ -308,7 +308,16 @@ app.delete('/api/delete/:id', async (req, res) => {
   const id = req.params.id;
   var query = `DELETE FROM gradovi WHERE id = ${id}`;
   try {
-    await pool.query(query);
+    const result = await pool.query(query);
+    if (result.rowCount == 0) {
+      res
+        .status(404)
+        .sendWrapper('OK', `Entry with id: ${id} has not been found`, null);
+    } else {
+      res
+        .status(200)
+        .sendWrapper('OK', `Deleted entry with id: ${id} from database`, null);
+    }
   } catch (error) {
     console.error('Error executing query', error);
     res
@@ -319,9 +328,6 @@ app.delete('/api/delete/:id', async (req, res) => {
         null
       );
   }
-  res
-    .status(200)
-    .sendWrapper('OK', `Deleted entry with id: ${id} from database`, null);
 });
 
 app.get('*', function (req, res) {
