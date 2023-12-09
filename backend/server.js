@@ -135,13 +135,30 @@ app.get('/api/getAll', async (req, res) => {
   var query = `SELECT * FROM gradovijson`;
   try {
     const result = await pool.query(query);
+    var response = result.rows[0].json_agg;
+    response.forEach((obj) => {
+      obj.links = [
+        {
+          href: `/api/get/${obj.id}`,
+          rel: 'self',
+          type: 'GET',
+        },
+        {
+          href: `/api/getCity/${obj.imegrada}`,
+          rel: 'self',
+          type: 'GET',
+        },
+        {
+          href: `/api/getBiggerThan/${obj.brojstanovnika - 1}`,
+          rel: 'related',
+          type: 'GET',
+        },
+      ];
+    });
+
     res
       .status(200)
-      .sendWrapper(
-        'OK',
-        'Fetched all entries from database',
-        result.rows[0].json_agg
-      );
+      .sendWrapper('OK', 'Fetched all entries from database', response);
   } catch (error) {
     console.error('Error executing query', error);
     res
@@ -169,12 +186,27 @@ app.get('/api/get/:id', async (req, res) => {
           null
         );
     } else {
+      const response = result.rows[0].getgradbyid;
+
+      response[0].links = [
+        {
+          href: `/api/getCity/${response[0].imegrada}`,
+          rel: 'self',
+          type: 'GET',
+        },
+        {
+          href: `/api/getBiggerThan/${response[0].brojstanovnika - 1}`,
+          rel: 'related',
+          type: 'GET',
+        },
+      ];
+
       res
         .status(200)
         .sendWrapper(
           'OK',
           `Fetched all entries from database matching the id: ${id}`,
-          result.rows[0].getgradbyid
+          response
         );
     }
   } catch (error) {
@@ -204,12 +236,33 @@ app.get('/api/getCity/:name', async (req, res) => {
           null
         );
     } else {
+      var response = result.rows[0].getgradbyname;
+      response.forEach((obj) => {
+        obj.links = [
+          {
+            href: `/api/get/${obj.id}`,
+            rel: 'self',
+            type: 'GET',
+          },
+          {
+            href: `/api/getCity/${obj.imegrada}`,
+            rel: 'self',
+            type: 'GET',
+          },
+          {
+            href: `/api/getBiggerThan/${obj.brojstanovnika - 1}`,
+            rel: 'related',
+            type: 'GET',
+          },
+        ];
+      });
+
       res
         .status(200)
         .sendWrapper(
           'OK',
           `Fetched all entries from database matching the name: ${name}`,
-          result.rows[0].getgradbyname
+          response
         );
     }
   } catch (error) {
@@ -239,12 +292,28 @@ app.get('/api/getBiggerThan/:number', async (req, res) => {
           null
         );
     } else {
+      var response = result.rows[0].getgradbysize;
+      response.forEach((obj) => {
+        obj.links = [
+          {
+            href: `/api/get/${obj.id}`,
+            rel: 'self',
+            type: 'GET',
+          },
+          {
+            href: `/api/getCity/${obj.imegrada}`,
+            rel: 'self',
+            type: 'GET',
+          },
+        ];
+      });
+
       res
         .status(200)
         .sendWrapper(
           'OK',
           `Fetched all entries from database that have population bigger than: ${number}`,
-          result.rows[0].getgradbysize
+          response
         );
     }
   } catch (error) {
@@ -274,12 +343,32 @@ app.get('/api/getZupanija/:name', async (req, res) => {
           null
         );
     } else {
+      var response = result.rows[0].getgradbyzup;
+      response.forEach((obj) => {
+        obj.links = [
+          {
+            href: `/api/get/${obj.id}`,
+            rel: 'self',
+            type: 'GET',
+          },
+          {
+            href: `/api/getCity/${obj.imegrada}`,
+            rel: 'self',
+            type: 'GET',
+          },
+          {
+            href: `/api/getBiggerThan/${obj.brojstanovnika - 1}`,
+            rel: 'related',
+            type: 'GET',
+          },
+        ];
+      });
       res
         .status(200)
         .sendWrapper(
           'OK',
           `Fetched all entries from database matching županija name: ${name}`,
-          result.rows[0].getgradbyzup
+          response
         );
     }
   } catch (error) {
@@ -349,13 +438,28 @@ app.post('/api/add', validateRequestBody, async (req, res) => {
 
   try {
     const result = await pool.query(`SELECT getGradById(${id})`);
+    const response = result.rows[0].getgradbyid;
+
+    response[0].links = [
+      {
+        href: `/api/get/${response[0].id}`,
+        rel: 'self',
+        type: 'GET',
+      },
+      {
+        href: `/api/getCity/${response[0].imegrada}`,
+        rel: 'self',
+        type: 'GET',
+      },
+      {
+        href: `/api/getBiggerThan/${response[0].brojstanovnika - 1}`,
+        rel: 'related',
+        type: 'GET',
+      },
+    ];
     res
       .status(200)
-      .sendWrapper(
-        'OK',
-        `Entry added successfully with id: ${id}`,
-        result.rows[0].getgradbyid
-      );
+      .sendWrapper('OK', `Entry added successfully with id: ${id}`, response);
   } catch (error) {
     console.error('Error executing query', error);
     res
@@ -389,9 +493,17 @@ app.put('/api/modify/:id', validateUpdateRequestBody, async (req, res) => {
         .status(404)
         .sendWrapper('OK', `Entry with id: ${id} has not been found`, null);
     } else {
+      const response = [
+        {
+          href: `/api/get/${id}`,
+          rel: 'self',
+          type: 'GET',
+        },
+      ];
+
       res
         .status(200)
-        .sendWrapper('OK', `Entry with id: ${id} has been updated`, null);
+        .sendWrapper('OK', `Entry with id: ${id} has been updated`, response);
     }
   } catch (error) {
     console.error('Error executing query', error);
