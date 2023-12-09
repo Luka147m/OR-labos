@@ -166,7 +166,7 @@ app.get('/api/get/:id', async (req, res) => {
         .sendWrapper(
           'Not found',
           `Failed to find entry matching the id: ${id}`,
-          result.rows[0].getgradbyid
+          null
         );
     } else {
       res
@@ -189,8 +189,109 @@ app.get('/api/get/:id', async (req, res) => {
   }
 });
 
-app.get('/api/getCity/:id', async (req, res) => {
-  const id = req.params.id;
+app.get('/api/getCity/:name', async (req, res) => {
+  const name = req.params.name;
+  var query = `SELECT getGradByName('${name}')`;
+  try {
+    const result = await pool.query(query);
+
+    if (!result.rows[0].getgradbyname) {
+      res
+        .status(404)
+        .sendWrapper(
+          'Not found',
+          `Failed to find entry matching the name: ${name}`,
+          null
+        );
+    } else {
+      res
+        .status(200)
+        .sendWrapper(
+          'OK',
+          `Fetched all entries from database matching the name: ${name}`,
+          result.rows[0].getgradbyname
+        );
+    }
+  } catch (error) {
+    console.error('Error executing query', error);
+    res
+      .status(500)
+      .sendWrapper(
+        'Internal server error',
+        'Unable to retrieve data from database',
+        null
+      );
+  }
+});
+
+app.get('/api/getBiggerThan/:number', async (req, res) => {
+  const number = req.params.number;
+  var query = `SELECT getGradBySize(${number})`;
+  try {
+    const result = await pool.query(query);
+
+    if (!result.rows[0].getgradbysize) {
+      res
+        .status(404)
+        .sendWrapper(
+          'Not found',
+          `Failed to find entries that have population bigger than: ${number}`,
+          null
+        );
+    } else {
+      res
+        .status(200)
+        .sendWrapper(
+          'OK',
+          `Fetched all entries from database that have population bigger than: ${number}`,
+          result.rows[0].getgradbysize
+        );
+    }
+  } catch (error) {
+    console.error('Error executing query', error);
+    res
+      .status(500)
+      .sendWrapper(
+        'Internal server error',
+        'Unable to retrieve data from database',
+        null
+      );
+  }
+});
+
+app.get('/api/getZupanija/:name', async (req, res) => {
+  const name = req.params.name;
+  var query = `SELECT getGradByZup('${name}')`;
+  try {
+    const result = await pool.query(query);
+
+    if (!result.rows[0].getgradbyzup) {
+      res
+        .status(404)
+        .sendWrapper(
+          'Not found',
+          `Failed to find entries from županija matching the name: ${name}`,
+          null
+        );
+    } else {
+      res
+        .status(200)
+        .sendWrapper(
+          'OK',
+          `Fetched all entries from database matching županija name: ${name}`,
+          result.rows[0].getgradbyzup
+        );
+    }
+  } catch (error) {
+    console.error('Error executing query', error);
+    res
+      .status(500)
+      .sendWrapper(
+        'Internal server error',
+        'Unable to retrieve data from database',
+        null
+      );
+  }
 });
 
 app.post('/api/add', validateRequestBody, async (req, res) => {

@@ -57,6 +57,129 @@ $$;
 
 ALTER FUNCTION public.getgradbyid(city_id integer) OWNER TO postgres;
 
+--
+-- Name: getgradbyname(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.getgradbyname(gradname character varying) RETURNS json
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    result_json JSON;
+BEGIN
+    SELECT json_agg(city_info) INTO result_json
+    FROM (
+        SELECT json_build_object(
+            'id', gradovi_kvartovi.gradid,
+            'imegrada', gradovi_kvartovi.imegrada,
+            'kvartovi',
+            CASE
+                WHEN count(gradovi_kvartovi.nazivkvarta) > 0 THEN json_agg(json_build_object('nazivkvarta', gradovi_kvartovi.nazivkvarta, 'brojkvartstan', gradovi_kvartovi.brojkvartstan))
+                ELSE '[]'::json
+            END,
+            'latitude', gradovi_kvartovi.latitude,
+            'povrsina', gradovi_kvartovi.povrsina,
+            'zupanija', gradovi_kvartovi.zupanija,
+            'longitude', gradovi_kvartovi.longitude,
+            'godinaosnutka', gradovi_kvartovi.godinaosnutka,
+            'gradonacelnik', gradovi_kvartovi.gradonacelnik,
+            'brojstanovnika', gradovi_kvartovi.brojstanovnika,
+            'nadmorskavisina', gradovi_kvartovi.nadmorskavisina
+        ) AS city_info
+        FROM gradovi_kvartovi
+        WHERE gradovi_kvartovi.imegrada LIKE '%' || GradName || '%'
+        GROUP BY gradovi_kvartovi.gradid, gradovi_kvartovi.imegrada, gradovi_kvartovi.latitude, gradovi_kvartovi.povrsina, gradovi_kvartovi.zupanija, gradovi_kvartovi.longitude, gradovi_kvartovi.godinaosnutka, gradovi_kvartovi.gradonacelnik, gradovi_kvartovi.brojstanovnika, gradovi_kvartovi.nadmorskavisina
+    ) subquery;
+
+    RETURN result_json;
+END;
+$$;
+
+
+ALTER FUNCTION public.getgradbyname(gradname character varying) OWNER TO postgres;
+
+--
+-- Name: getgradbysize(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.getgradbysize(population integer) RETURNS json
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    result_json JSON;
+BEGIN
+    SELECT json_agg(city_info) INTO result_json
+    FROM (
+        SELECT json_build_object(
+            'id', gradovi_kvartovi.gradid,
+            'imegrada', gradovi_kvartovi.imegrada,
+            'kvartovi',
+            CASE
+                WHEN count(gradovi_kvartovi.nazivkvarta) > 0 THEN json_agg(json_build_object('nazivkvarta', gradovi_kvartovi.nazivkvarta, 'brojkvartstan', gradovi_kvartovi.brojkvartstan))
+                ELSE '[]'::json
+            END,
+            'latitude', gradovi_kvartovi.latitude,
+            'povrsina', gradovi_kvartovi.povrsina,
+            'zupanija', gradovi_kvartovi.zupanija,
+            'longitude', gradovi_kvartovi.longitude,
+            'godinaosnutka', gradovi_kvartovi.godinaosnutka,
+            'gradonacelnik', gradovi_kvartovi.gradonacelnik,
+            'brojstanovnika', gradovi_kvartovi.brojstanovnika,
+            'nadmorskavisina', gradovi_kvartovi.nadmorskavisina
+        ) AS city_info
+        FROM gradovi_kvartovi
+        WHERE gradovi_kvartovi.brojstanovnika > population
+        GROUP BY gradovi_kvartovi.gradid, gradovi_kvartovi.imegrada, gradovi_kvartovi.latitude, gradovi_kvartovi.povrsina, gradovi_kvartovi.zupanija, gradovi_kvartovi.longitude, gradovi_kvartovi.godinaosnutka, gradovi_kvartovi.gradonacelnik, gradovi_kvartovi.brojstanovnika, gradovi_kvartovi.nadmorskavisina
+    ) subquery;
+
+    RETURN result_json;
+END;
+$$;
+
+
+ALTER FUNCTION public.getgradbysize(population integer) OWNER TO postgres;
+
+--
+-- Name: getgradbyzup(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.getgradbyzup(zupname character varying) RETURNS json
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    result_json JSON;
+BEGIN
+    SELECT json_agg(city_info) INTO result_json
+    FROM (
+        SELECT json_build_object(
+            'id', gradovi_kvartovi.gradid,
+            'imegrada', gradovi_kvartovi.imegrada,
+            'kvartovi',
+            CASE
+                WHEN count(gradovi_kvartovi.nazivkvarta) > 0 THEN json_agg(json_build_object('nazivkvarta', gradovi_kvartovi.nazivkvarta, 'brojkvartstan', gradovi_kvartovi.brojkvartstan))
+                ELSE '[]'::json
+            END,
+            'latitude', gradovi_kvartovi.latitude,
+            'povrsina', gradovi_kvartovi.povrsina,
+            'zupanija', gradovi_kvartovi.zupanija,
+            'longitude', gradovi_kvartovi.longitude,
+            'godinaosnutka', gradovi_kvartovi.godinaosnutka,
+            'gradonacelnik', gradovi_kvartovi.gradonacelnik,
+            'brojstanovnika', gradovi_kvartovi.brojstanovnika,
+            'nadmorskavisina', gradovi_kvartovi.nadmorskavisina
+        ) AS city_info
+        FROM gradovi_kvartovi
+        WHERE gradovi_kvartovi.zupanija LIKE '%' || ZupName || '%'
+        GROUP BY gradovi_kvartovi.gradid, gradovi_kvartovi.imegrada, gradovi_kvartovi.latitude, gradovi_kvartovi.povrsina, gradovi_kvartovi.zupanija, gradovi_kvartovi.longitude, gradovi_kvartovi.godinaosnutka, gradovi_kvartovi.gradonacelnik, gradovi_kvartovi.brojstanovnika, gradovi_kvartovi.nadmorskavisina
+    ) subquery;
+
+    RETURN result_json;
+END;
+$$;
+
+
+ALTER FUNCTION public.getgradbyzup(zupname character varying) OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
