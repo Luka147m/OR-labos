@@ -3,6 +3,9 @@ const app = express();
 const bodyParser = require('body-parser');
 const Ajv = require('ajv');
 const ajv = new Ajv();
+const path = require('path');
+
+const OpenApi = require('../openapi.json');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -541,6 +544,21 @@ app.delete('/api/delete/:id', async (req, res) => {
         null
       );
   }
+});
+
+app.get('/api/specification', async (req, res) => {
+  res
+    .status(200)
+    .sendWrapper(
+      'OK',
+      'OpenApi specification /api/specification/html',
+      OpenApi
+    );
+});
+
+app.get('/api/specification/html', async (req, res) => {
+  const filePath = path.join(__dirname, '../openapi.html');
+  res.status(200).sendFile(filePath);
 });
 
 app.get('*', function (req, res) {
