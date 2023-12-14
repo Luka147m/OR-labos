@@ -4,6 +4,19 @@ const bodyParser = require('body-parser');
 const Ajv = require('ajv');
 const ajv = new Ajv();
 const path = require('path');
+const { auth, requiresAuth } = require('express-openid-connect');
+require('dotenv').config();
+
+const config = {
+  authRequired: process.env.AUTH_REQUIRED === 'true',
+  auth0Logout: process.env.AUTH0_LOGOUT === 'true',
+  secret: process.env.SECRET,
+  baseURL: process.env.BASE_URL,
+  clientID: process.env.CLIENT_ID,
+  issuerBaseURL: process.env.ISSUER_BASE_URL,
+};
+
+app.use(auth(config));
 
 const OpenApi = require('../openapi.json');
 
@@ -71,6 +84,26 @@ const validateUpdateRequestBody = (req, res, next) => {
 
   next();
 };
+
+app.get('/', (req, res) => {
+  res.send(
+    `<a href="/login">Login</a><br/><a href="/logout">Logout</a><br/>${
+      req.oidc.isAuthenticated()
+        ? 'Logged in<br/><a href="/profile">Korisnički profil</a><br/>'
+        : 'Logged out'
+    }`
+  );
+});
+
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(
+    `<h1>Korisnički profil</h1><pre>${JSON.stringify(
+      req.oidc.user,
+      null,
+      4
+    )}</pre>`
+  );
+});
 
 app.post('/getJson', async (req, res) => {
   const { searchInput, selectedField } = req.body;
