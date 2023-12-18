@@ -6,7 +6,7 @@ Skup podataka o gradovima Hrvatske
 Luka Miličević
 ## Licenca
 Creative Commons Zero v1.0 Universal
-## Verzija: 2.0
+## Verzija: 3.0
 ## Jezik: Hrvatski
 ## Podaci
 Podaci preuzeti od [Državnog zavoda za statistiku](https://dzs.gov.hr/) (popis 2021.)
