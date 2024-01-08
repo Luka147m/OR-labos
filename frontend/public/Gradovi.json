@@ -124,6 +124,58 @@
     ]
   },
   {
+    "gradid": 19,
+    "imegrada": "Vinkovci",
+    "zupanija": "Vukovarsko-srijemska",
+    "gradonacelnik": "Ivan Bosančić",
+    "brojstanovnika": 33121,
+    "povrsina": 102.85,
+    "godinaosnutka": 1232,
+    "latitude": 45.2886,
+    "longitude": 18.8057,
+    "nadmorskavisina": 90,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Centar",
+        "brojkvartstan": 8000
+      },
+      {
+        "nazivkvarta": "Šećerana",
+        "brojkvartstan": 6000
+      },
+      {
+        "nazivkvarta": "Mitnica",
+        "brojkvartstan": 5000
+      }
+    ]
+  },
+  {
+    "gradid": 20,
+    "imegrada": "Virovitica",
+    "zupanija": "Vukovarsko-srijemska",
+    "gradonacelnik": "Ivan Bosančić",
+    "brojstanovnika": 33121,
+    "povrsina": 102.85,
+    "godinaosnutka": 1232,
+    "latitude": 45.2886,
+    "longitude": 18.8057,
+    "nadmorskavisina": 90,
+    "kvartovi": [
+      {
+        "nazivkvarta": "Centar",
+        "brojkvartstan": 8000
+      },
+      {
+        "nazivkvarta": "Šećerana",
+        "brojkvartstan": 6000
+      },
+      {
+        "nazivkvarta": "Mitnica",
+        "brojkvartstan": 5000
+      }
+    ]
+  },
+  {
     "gradid": 10,
     "imegrada": "Dubrovnik",
     "zupanija": "Dubrovačko-neretvanska",
