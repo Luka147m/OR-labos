@@ -14,7 +14,7 @@
     }
   },
   "paths": {
-    "/api/getAll": {
+    "/api/gradovi": {
       "get": {
         "summary": "Dohvaća sve gradove iz baze podataka",
         "responses": {
@@ -22,6 +22,7 @@
             "description": "Uspijeh u dohvaćanju podataka, vraćeni podatci su u JSON-u",
             "content": {
               "application/json": {
+                "schema": {},
                 "example": {
                   "status": "OK",
                   "message": "Fetched all entries from database",
@@ -53,17 +54,17 @@
                       "nadmorskavisina": 122,
                       "links": [
                         {
-                          "href": "/api/get/1",
+                          "href": "/api/grad/1",
                           "rel": "self",
                           "type": "GET"
                         },
                         {
-                          "href": "/api/getCity/Zagreb",
+                          "href": "/api/grad/ime/Zagreb",
                           "rel": "self",
                           "type": "GET"
                         },
                         {
-                          "href": "/api/getBiggerThan/777182",
+                          "href": "/api/gradovi/populacija/777182",
                           "rel": "related",
                           "type": "GET"
                         }
@@ -83,17 +84,17 @@
                       "nadmorskavisina": 96,
                       "links": [
                         {
-                          "href": "/api/get/5",
+                          "href": "/api/grad/5",
                           "rel": "self",
                           "type": "GET"
                         },
                         {
-                          "href": "/api/getCity/Slavonski Brod",
+                          "href": "/api/grad/ime/Slavonski Brod",
                           "rel": "self",
                           "type": "GET"
                         },
                         {
-                          "href": "/api/getBiggerThan/51263",
+                          "href": "/api/gradovi/populacija/51263",
                           "rel": "related",
                           "type": "GET"
                         }
@@ -118,17 +119,17 @@
                       "nadmorskavisina": 90,
                       "links": [
                         {
-                          "href": "/api/get/4",
+                          "href": "/api/grad/4",
                           "rel": "self",
                           "type": "GET"
                         },
                         {
-                          "href": "/api/getCity/Osijek",
+                          "href": "/api/grad/ime/Osijek",
                           "rel": "self",
                           "type": "GET"
                         },
                         {
-                          "href": "/api/getBiggerThan/97845",
+                          "href": "/api/gradovi/populacija/97845",
                           "rel": "related",
                           "type": "GET"
                         }
@@ -143,6 +144,7 @@
             "description": "Internal Server Error",
             "content": {
               "application/json": {
+                "schema": {},
                 "example": {
                   "status": "OK",
                   "message": "Unable to retrieve data from database",
@@ -152,380 +154,97 @@
             }
           }
         }
-      }
-    },
-    "/api/get/{id}": {
-      "get": {
-        "summary": "Dohvaća podatke o gradu pomoću id parametra u URL-u",
-        "parameters": [
-          {
-            "name": "id",
-            "description": "ID grada",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Uspješno dohvaćanje podataka o gradu",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "OK",
-                  "message": "Fetched all entries from database matching the id: 1",
-                  "response": [
-                    {
-                      "id": 1,
-                      "imegrada": "Zagreb",
-                      "kvartovi": [
-                        {
-                          "nazivkvarta": "Gornja Dubrava",
-                          "brojkvartstan": 58908
-                        },
-                        {
-                          "nazivkvarta": "Maksimir",
-                          "brojkvartstan": 47989
-                        },
-                        {
-                          "nazivkvarta": "Trešnjevka",
-                          "brojkvartstan": 119475
-                        }
-                      ],
-                      "latitude": 45.813,
-                      "povrsina": 641.2,
-                      "zupanija": "Grad Zagreb",
-                      "longitude": 15.9775,
-                      "godinaosnutka": 1094,
-                      "gradonacelnik": "Tomislav Tomašević",
-                      "brojstanovnika": 777183,
-                      "nadmorskavisina": 122,
-                      "links": [
-                        {
-                          "href": "/api/getCity/Zagreb",
-                          "rel": "self",
-                          "type": "GET"
-                        },
-                        {
-                          "href": "/api/getBiggerThan/777182",
-                          "rel": "related",
-                          "type": "GET"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Podatci o gradu s zadanim ID nisu pronađeni",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "Not found",
-                  "message": "Failed to find entry matching the id: 32",
-                  "response": null
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "Internal Server Error",
-                  "message": "Unable to retrieve data from database",
-                  "response": null
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/getCity/{name}": {
-      "get": {
-        "summary": "Dohvaća podatke o gradu pomoću imena grada (ili dijela imena) u URL-u",
-        "parameters": [
-          {
-            "name": "name",
-            "description": "Ime traženog grada ili dio imena",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Uspješno dohvaćanje podataka o gradu",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "OK",
-                  "message": "Fetched all entries from database matching the name: Požega",
-                  "response": [
-                    {
-                      "id": 6,
-                      "imegrada": "Požega",
-                      "kvartovi": [
-                        {
-                          "nazivkvarta": "Sajmište",
-                          "brojkvartstan": 5432
-                        }
-                      ],
-                      "latitude": 45.33,
-                      "povrsina": 133.91,
-                      "zupanija": "Požeško-slavonska",
-                      "longitude": 17.67,
-                      "godinaosnutka": 1100,
-                      "gradonacelnik": "Željko Glavić",
-                      "brojstanovnika": 22564,
-                      "nadmorskavisina": 152,
-                      "links": [
-                        {
-                          "href": "/api/get/6",
-                          "rel": "self",
-                          "type": "GET"
-                        },
-                        {
-                          "href": "/api/getCity/Požega",
-                          "rel": "self",
-                          "type": "GET"
-                        },
-                        {
-                          "href": "/api/getBiggerThan/22563",
-                          "rel": "related",
-                          "type": "GET"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Podatci o gradu s zadanim imenom nisu pronađeni",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "Not Found",
-                  "message": "Failed to find entry matching the name:",
-                  "response": null
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "Internal Server Error",
-                  "message": "Unable to retrieve data from database",
-                  "response": null
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/getBiggerThan/{number}": {
-      "get": {
-        "summary": "Dohvaća gradove koji imaju populaciju veću od zadanog broja u URL-u",
-        "parameters": [
-          {
-            "name": "number",
-            "description": "Broj, traže se gradovi s većom populacijom od toga broja",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Uspješno dohvaćanje podataka o gradu",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "OK",
-                  "message": "Fetched all entries from database that have population bigger than: 500000",
-                  "response": [
-                    {
-                      "id": 1,
-                      "imegrada": "Zagreb",
-                      "kvartovi": [
-                        {
-                          "nazivkvarta": "Gornja Dubrava",
-                          "brojkvartstan": 58908
-                        },
-                        {
-                          "nazivkvarta": "Maksimir",
-                          "brojkvartstan": 47989
-                        },
-                        {
-                          "nazivkvarta": "Trešnjevka",
-                          "brojkvartstan": 119475
-                        }
-                      ],
-                      "latitude": 45.813,
-                      "povrsina": 641.2,
-                      "zupanija": "Grad Zagreb",
-                      "longitude": 15.9775,
-                      "godinaosnutka": 1094,
-                      "gradonacelnik": "Tomislav Tomašević",
-                      "brojstanovnika": 777183,
-                      "nadmorskavisina": 122,
-                      "links": [
-                        {
-                          "href": "/api/get/1",
-                          "rel": "self",
-                          "type": "GET"
-                        },
-                        {
-                          "href": "/api/getCity/Zagreb",
-                          "rel": "self",
-                          "type": "GET"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Podatci o gradu s većom populacijom od zadane nisu pronađeni",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "Not Found",
-                  "message": "Failed to find entries that have population bigger than: 5000000",
-                  "response": null
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "Internal Server Error",
-                  "message": "Unable to retrieve data from database",
-                  "response": null
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/getZupanija/{name}": {
-      "get": {
-        "summary": "Dohvaća podatke o gradovima koji se nalaze u zadanoj županiji",
-        "parameters": [
-          {
-            "name": "name",
-            "description": "Ime tražene županije ili dio imena",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Uspješno dohvaćanje podataka o gradu",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "OK",
-                  "message": "Fetched all entries from database matching županija name: Požeško-slavonska",
-                  "response": [
-                    {
-                      "id": 6,
-                      "imegrada": "Požega",
-                      "kvartovi": [
-                        {
-                          "nazivkvarta": "Sajmište",
-                          "brojkvartstan": 5432
-                        }
-                      ],
-                      "latitude": 45.33,
-                      "povrsina": 133.91,
-                      "zupanija": "Požeško-slavonska",
-                      "longitude": 17.67,
-                      "godinaosnutka": 1100,
-                      "gradonacelnik": "Željko Glavić",
-                      "brojstanovnika": 22564,
-                      "nadmorskavisina": 152,
-                      "links": [
-                        {
-                          "href": "/api/get/6",
-                          "rel": "self",
-                          "type": "GET"
-                        },
-                        {
-                          "href": "/api/getCity/Požega",
-                          "rel": "self",
-                          "type": "GET"
-                        },
-                        {
-                          "href": "/api/getBiggerThan/22563",
-                          "rel": "related",
-                          "type": "GET"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Nisu pronađeni gradovi koji pripadaju zadanoj županiji",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "Not Found",
-                  "message": "Failed to find entries from županija matching the name: Požeško-slavonska",
-                  "response": null
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "Internal Server Error",
-                  "message": "Unable to retrieve data from database",
-                  "response": null
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/add": {
+      },
       "post": {
         "summary": "Dodavanje novog grada",
         "requestBody": {
           "content": {
             "application/json": {
+              "schema": {
+                "$ref": "https://github.com/Luka147m/OR-labos/blob/main/backend/addRequestSchema.json",
+                "properties": {
+                  "imegrada": {
+                    "title": "imegrada",
+                    "description": "Sadrži ime grada",
+                    "type": "string"
+                  },
+                  "zupanija": {
+                    "title": "zupanija",
+                    "description": "Županija u kojoj se nalazi grad",
+                    "type": "string"
+                  },
+                  "gradonacelnik": {
+                    "title": "gradonacelnik",
+                    "description": "Trenutni gradonačelnik",
+                    "type": "string"
+                  },
+                  "brojstanovnika": {
+                    "title": "brojstanovnika",
+                    "description": "Broj stanovnika pojedinog grada",
+                    "type": "integer"
+                  },
+                  "povrsina": {
+                    "title": "povrsina",
+                    "description": "Površina pod vlasništvom grada (u kilometrima kvadratnim)",
+                    "type": "number"
+                  },
+                  "godinaosnutka": {
+                    "title": "godinaosnutka",
+                    "description": "Godina kada je grad osnovan (negativna godina predstavlja godinu prije krista)",
+                    "type": "integer"
+                  },
+                  "latitude": {
+                    "title": "latitude",
+                    "description": "Zemljopisna širina grada",
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "title": "longitude",
+                    "description": "Zemljopisna visina grada",
+                    "type": "number"
+                  },
+                  "nadmorskavisina": {
+                    "title": "nadmorskavisina",
+                    "description": "Nadmorska visina na kojoj se nalazi grad",
+                    "type": "integer"
+                  },
+                  "kvartovi": {
+                    "title": "kvartovi",
+                    "description": "Popis kvartova grada",
+                    "type": "array",
+                    "items": {
+                      "title": "Kvart",
+                      "description": "Objekt koji sadrži informacije o kvartu",
+                      "type": "object",
+                      "required": ["nazivkvarta", "brojkvartstan"],
+                      "properties": {
+                        "nazivkvarta": {
+                          "title": "nazivkvarta",
+                          "description": "Naziv kvarta",
+                          "type": "string"
+                        },
+                        "brojkvartstan": {
+                          "title": "brojkvartstan",
+                          "description": "Broj stanovnika u pojedinom kvartu",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "imegrada",
+                  "zupanija",
+                  "gradonacelnik",
+                  "brojstanovnika",
+                  "povrsina",
+                  "godinaosnutka",
+                  "latitude",
+                  "longitude",
+                  "nadmorskavisina",
+                  "kvartovi"
+                ]
+              },
               "example": {
                 "imegrada": "Zagreb",
                 "zupanija": "Grad Zagreb",
@@ -560,6 +279,7 @@
             "description": "Uspješno dodan grad",
             "content": {
               "application/json": {
+                "schema": {},
                 "example": {
                   "status": "OK",
                   "message": "Entry added successfully with id: 1",
@@ -591,17 +311,17 @@
                       "nadmorskavisina": 122,
                       "links": [
                         {
-                          "href": "/api/get/1",
+                          "href": "/api/grad/1",
                           "rel": "self",
                           "type": "GET"
                         },
                         {
-                          "href": "/api/getCity/Zagreb",
+                          "href": "/api/grad/ime/Zagreb",
                           "rel": "self",
                           "type": "GET"
                         },
                         {
-                          "href": "/api/getBiggerThan/777182",
+                          "href": "/api/gradovi/populacija/777182",
                           "rel": "related",
                           "type": "GET"
                         }
@@ -616,6 +336,7 @@
             "description": "Internal Server Error",
             "content": {
               "application/json": {
+                "schema": {},
                 "example": {
                   "status": "Internal Server Error",
                   "message": "Unable to retrieve data from database",
@@ -627,10 +348,103 @@
         }
       }
     },
-
-    "/api/delete/{id}": {
+    "/api/grad/{id}": {
+      "get": {
+        "summary": "Dohvaća podatke o gradu pomoću id parametra u URL-u",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID grada",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Uspješno dohvaćanje podataka o gradu",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "OK",
+                  "message": "Fetched all entries from database matching the id: 1",
+                  "response": [
+                    {
+                      "id": 1,
+                      "imegrada": "Zagreb",
+                      "kvartovi": [
+                        {
+                          "nazivkvarta": "Gornja Dubrava",
+                          "brojkvartstan": 58908
+                        },
+                        {
+                          "nazivkvarta": "Maksimir",
+                          "brojkvartstan": 47989
+                        },
+                        {
+                          "nazivkvarta": "Trešnjevka",
+                          "brojkvartstan": 119475
+                        }
+                      ],
+                      "latitude": 45.813,
+                      "povrsina": 641.2,
+                      "zupanija": "Grad Zagreb",
+                      "longitude": 15.9775,
+                      "godinaosnutka": 1094,
+                      "gradonacelnik": "Tomislav Tomašević",
+                      "brojstanovnika": 777183,
+                      "nadmorskavisina": 122,
+                      "links": [
+                        {
+                          "href": "/api/grad/ime/Zagreb",
+                          "rel": "self",
+                          "type": "GET"
+                        },
+                        {
+                          "href": "/api/gradovi/populacija/777182",
+                          "rel": "related",
+                          "type": "GET"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Podatci o gradu s zadanim ID nisu pronađeni",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "Not found",
+                  "message": "Failed to find entry matching the id: 32",
+                  "response": null
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "Internal Server Error",
+                  "message": "Unable to retrieve data from database",
+                  "response": null
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
-        "summary": "Delete grad by ID",
+        "summary": "Briše grad s ID",
         "parameters": [
           {
             "name": "id",
@@ -646,6 +460,7 @@
             "description": "Uspješno obrisan grad i kvartovi",
             "content": {
               "application/json": {
+                "schema": {},
                 "example": {
                   "status": "OK",
                   "message": "Deleted entry with id: 23 from database",
@@ -658,6 +473,7 @@
             "description": "Podatci o gradu s zadanim ID nisu pronađeni",
             "content": {
               "application/json": {
+                "schema": {},
                 "example": {
                   "status": "Not found",
                   "message": "Failed to find entry matching the id: 32",
@@ -670,6 +486,7 @@
             "description": "Internal Server Error",
             "content": {
               "application/json": {
+                "schema": {},
                 "example": {
                   "status": "Internal Server Error",
                   "message": "Unable to retrieve data from database",
@@ -679,10 +496,7 @@
             }
           }
         }
-      }
-    },
-
-    "/api/modify/{id}": {
+      },
       "put": {
         "summary": "Promjeni informacije o gradu pomoću ID-ja",
         "parameters": [
@@ -698,6 +512,80 @@
         "requestBody": {
           "content": {
             "application/json": {
+              "schema": {
+                "$ref": "https://github.com/Luka147m/OR-labos/blob/main/backend/updateRequestSchema.json",
+                "properties": {
+                  "imegrada": {
+                    "title": "imegrada",
+                    "description": "Sadrži ime grada",
+                    "type": "string"
+                  },
+                  "zupanija": {
+                    "title": "zupanija",
+                    "description": "Županija u kojoj se nalazi grad",
+                    "type": "string"
+                  },
+                  "gradonacelnik": {
+                    "title": "gradonacelnik",
+                    "description": "Trenutni gradonačelnik",
+                    "type": "string"
+                  },
+                  "brojstanovnika": {
+                    "title": "brojstanovnika",
+                    "description": "Broj stanovnika pojedinog grada",
+                    "type": "integer"
+                  },
+                  "povrsina": {
+                    "title": "povrsina",
+                    "description": "Površina pod vlasništvom grada (u kilometrima kvadratnim)",
+                    "type": "number"
+                  },
+                  "godinaosnutka": {
+                    "title": "godinaosnutka",
+                    "description": "Godina kada je grad osnovan (negativna godina predstavlja godinu prije krista)",
+                    "type": "integer"
+                  },
+                  "latitude": {
+                    "title": "latitude",
+                    "description": "Zemljopisna širina grada",
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "title": "longitude",
+                    "description": "Zemljopisna visina grada",
+                    "type": "number"
+                  },
+                  "nadmorskavisina": {
+                    "title": "nadmorskavisina",
+                    "description": "Nadmorska visina na kojoj se nalazi grad",
+                    "type": "integer"
+                  },
+                  "kvartovi": {
+                    "title": "kvartovi",
+                    "description": "Popis kvartova grada",
+                    "type": "array",
+                    "items": {
+                      "title": "Kvart",
+                      "description": "Objekt koji sadrži informacije o kvartu",
+                      "type": "object",
+                      "required": ["nazivkvarta", "brojkvartstan"],
+                      "properties": {
+                        "nazivkvarta": {
+                          "title": "nazivkvarta",
+                          "description": "Naziv kvarta",
+                          "type": "string"
+                        },
+                        "brojkvartstan": {
+                          "title": "brojkvartstan",
+                          "description": "Broj stanovnika u pojedinom kvartu",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
               "example": {
                 "imegrada": "Poznan",
                 "zupanija": "Požeško-slavonska",
@@ -721,7 +609,7 @@
               "application/json": {
                 "example": [
                   {
-                    "href": "/api/get/{id}",
+                    "href": "/api/grad/{id}",
                     "rel": "self",
                     "type": "GET"
                   }
@@ -733,6 +621,7 @@
             "description": "Podatci o gradu s zadanim ID nisu pronađeni",
             "content": {
               "application/json": {
+                "schema": {},
                 "example": {
                   "status": "Not found",
                   "message": "Failed to find entry matching the id: 32",
@@ -745,6 +634,289 @@
             "description": "Internal Server Error",
             "content": {
               "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "Internal Server Error",
+                  "message": "Unable to retrieve data from database",
+                  "response": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/grad/ime/{name}": {
+      "get": {
+        "summary": "Dohvaća podatke o gradu pomoću imena grada (ili dijela imena) u URL-u",
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Ime traženog grada ili dio imena",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Uspješno dohvaćanje podataka o gradu",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "OK",
+                  "message": "Fetched all entries from database matching the name: Požega",
+                  "response": [
+                    {
+                      "id": 6,
+                      "imegrada": "Požega",
+                      "kvartovi": [
+                        {
+                          "nazivkvarta": "Sajmište",
+                          "brojkvartstan": 5432
+                        }
+                      ],
+                      "latitude": 45.33,
+                      "povrsina": 133.91,
+                      "zupanija": "Požeško-slavonska",
+                      "longitude": 17.67,
+                      "godinaosnutka": 1100,
+                      "gradonacelnik": "Željko Glavić",
+                      "brojstanovnika": 22564,
+                      "nadmorskavisina": 152,
+                      "links": [
+                        {
+                          "href": "/api/grad/6",
+                          "rel": "self",
+                          "type": "GET"
+                        },
+                        {
+                          "href": "/api/grad/ime/Požega",
+                          "rel": "self",
+                          "type": "GET"
+                        },
+                        {
+                          "href": "/api/gradovi/populacija/22563",
+                          "rel": "related",
+                          "type": "GET"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Podatci o gradu s zadanim imenom nisu pronađeni",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "Not Found",
+                  "message": "Failed to find entry matching the name:",
+                  "response": null
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "Internal Server Error",
+                  "message": "Unable to retrieve data from database",
+                  "response": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/gradovi/populacija/{number}": {
+      "get": {
+        "summary": "Dohvaća gradove koji imaju populaciju veću od zadanog broja u URL-u",
+        "parameters": [
+          {
+            "name": "number",
+            "description": "Broj, traže se gradovi s većom populacijom od toga broja",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Uspješno dohvaćanje podataka o gradu",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "OK",
+                  "message": "Fetched all entries from database that have population bigger than: 500000",
+                  "response": [
+                    {
+                      "id": 1,
+                      "imegrada": "Zagreb",
+                      "kvartovi": [
+                        {
+                          "nazivkvarta": "Gornja Dubrava",
+                          "brojkvartstan": 58908
+                        },
+                        {
+                          "nazivkvarta": "Maksimir",
+                          "brojkvartstan": 47989
+                        },
+                        {
+                          "nazivkvarta": "Trešnjevka",
+                          "brojkvartstan": 119475
+                        }
+                      ],
+                      "latitude": 45.813,
+                      "povrsina": 641.2,
+                      "zupanija": "Grad Zagreb",
+                      "longitude": 15.9775,
+                      "godinaosnutka": 1094,
+                      "gradonacelnik": "Tomislav Tomašević",
+                      "brojstanovnika": 777183,
+                      "nadmorskavisina": 122,
+                      "links": [
+                        {
+                          "href": "/api/grad/1",
+                          "rel": "self",
+                          "type": "GET"
+                        },
+                        {
+                          "href": "/api/grad/ime/Zagreb",
+                          "rel": "self",
+                          "type": "GET"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Podatci o gradu s većom populacijom od zadane nisu pronađeni",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "Not Found",
+                  "message": "Failed to find entries that have population bigger than: 5000000",
+                  "response": null
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "Internal Server Error",
+                  "message": "Unable to retrieve data from database",
+                  "response": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/zupanija/{name}": {
+      "get": {
+        "summary": "Dohvaća podatke o gradovima koji se nalaze u zadanoj županiji",
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Ime tražene županije ili dio imena",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Uspješno dohvaćanje podataka o gradu",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "OK",
+                  "message": "Fetched all entries from database matching županija name: Požeško-slavonska",
+                  "response": [
+                    {
+                      "id": 6,
+                      "imegrada": "Požega",
+                      "kvartovi": [
+                        {
+                          "nazivkvarta": "Sajmište",
+                          "brojkvartstan": 5432
+                        }
+                      ],
+                      "latitude": 45.33,
+                      "povrsina": 133.91,
+                      "zupanija": "Požeško-slavonska",
+                      "longitude": 17.67,
+                      "godinaosnutka": 1100,
+                      "gradonacelnik": "Željko Glavić",
+                      "brojstanovnika": 22564,
+                      "nadmorskavisina": 152,
+                      "links": [
+                        {
+                          "href": "/api/grad/6",
+                          "rel": "self",
+                          "type": "GET"
+                        },
+                        {
+                          "href": "/api/grad/ime/Požega",
+                          "rel": "self",
+                          "type": "GET"
+                        },
+                        {
+                          "href": "/api/gradovi/populacija/22563",
+                          "rel": "related",
+                          "type": "GET"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nisu pronađeni gradovi koji pripadaju zadanoj županiji",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "Not Found",
+                  "message": "Failed to find entries from županija matching the name: Požeško-slavonska",
+                  "response": null
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {},
                 "example": {
                   "status": "Internal Server Error",
                   "message": "Unable to retrieve data from database",
@@ -764,25 +936,13 @@
             "description": "Uspješno dohvaćeno",
             "content": {
               "application/json": {
+                "schema": {},
                 "example": {
                   "status": "OK",
-                  "message": "OpenApi specification /api/specification/html",
+                  "message": "OpenApi specification",
                   "response": { "specification": "openApi.json" }
                 }
               }
-            }
-          }
-        }
-      }
-    },
-    "/api/specification/html": {
-      "get": {
-        "summary": "Dohvaća HTML verziju OpenAPI specifikacije",
-        "responses": {
-          "200": {
-            "description": "Uspješno dohvaćeno",
-            "content": {
-              "text/html": {}
             }
           }
         }

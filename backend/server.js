@@ -134,7 +134,7 @@ app.post('/getJson', async (req, res) => {
   }
 });
 
-app.get('/api/getAll', async (req, res) => {
+app.get('/api/gradovi', async (req, res) => {
   var query = `SELECT * FROM gradovijson`;
   try {
     const result = await pool.query(query);
@@ -142,17 +142,17 @@ app.get('/api/getAll', async (req, res) => {
     response.forEach((obj) => {
       obj.links = [
         {
-          href: `/api/get/${obj.id}`,
+          href: `/api/grad/${obj.id}`,
           rel: 'self',
           type: 'GET',
         },
         {
-          href: `/api/getCity/${obj.imegrada}`,
+          href: `/api/grad/ime/${obj.imegrada}`,
           rel: 'self',
           type: 'GET',
         },
         {
-          href: `/api/getBiggerThan/${obj.brojstanovnika - 1}`,
+          href: `/api/gradovi/populacija/${obj.brojstanovnika - 1}`,
           rel: 'related',
           type: 'GET',
         },
@@ -174,7 +174,7 @@ app.get('/api/getAll', async (req, res) => {
   }
 });
 
-app.get('/api/get/:id', async (req, res) => {
+app.get('/api/grad/:id', async (req, res) => {
   const id = req.params.id;
   var query = `SELECT getGradById(${id})`;
   try {
@@ -193,12 +193,12 @@ app.get('/api/get/:id', async (req, res) => {
 
       response[0].links = [
         {
-          href: `/api/getCity/${response[0].imegrada}`,
+          href: `/api/grad/ime/${response[0].imegrada}`,
           rel: 'self',
           type: 'GET',
         },
         {
-          href: `/api/getBiggerThan/${response[0].brojstanovnika - 1}`,
+          href: `/api/gradovi/populacija/${response[0].brojstanovnika - 1}`,
           rel: 'related',
           type: 'GET',
         },
@@ -224,7 +224,7 @@ app.get('/api/get/:id', async (req, res) => {
   }
 });
 
-app.get('/api/getCity/:name', async (req, res) => {
+app.get('/api/grad/ime/:name', async (req, res) => {
   const name = req.params.name;
   var query = `SELECT getGradByName('${name}')`;
   try {
@@ -243,17 +243,17 @@ app.get('/api/getCity/:name', async (req, res) => {
       response.forEach((obj) => {
         obj.links = [
           {
-            href: `/api/get/${obj.id}`,
+            href: `/api/grad/${obj.id}`,
             rel: 'self',
             type: 'GET',
           },
           {
-            href: `/api/getCity/${obj.imegrada}`,
+            href: `/api/grad/ime/${obj.imegrada}`,
             rel: 'self',
             type: 'GET',
           },
           {
-            href: `/api/getBiggerThan/${obj.brojstanovnika - 1}`,
+            href: `/api/gradovi/populacija/${obj.brojstanovnika - 1}`,
             rel: 'related',
             type: 'GET',
           },
@@ -280,7 +280,7 @@ app.get('/api/getCity/:name', async (req, res) => {
   }
 });
 
-app.get('/api/getBiggerThan/:number', async (req, res) => {
+app.get('/api/gradovi/populacija/:number', async (req, res) => {
   const number = req.params.number;
   var query = `SELECT getGradBySize(${number})`;
   try {
@@ -299,12 +299,12 @@ app.get('/api/getBiggerThan/:number', async (req, res) => {
       response.forEach((obj) => {
         obj.links = [
           {
-            href: `/api/get/${obj.id}`,
+            href: `/api/grad/${obj.id}`,
             rel: 'self',
             type: 'GET',
           },
           {
-            href: `/api/getCity/${obj.imegrada}`,
+            href: `/api/grad/ime/${obj.imegrada}`,
             rel: 'self',
             type: 'GET',
           },
@@ -331,7 +331,7 @@ app.get('/api/getBiggerThan/:number', async (req, res) => {
   }
 });
 
-app.get('/api/getZupanija/:name', async (req, res) => {
+app.get('/api/zupanija/:name', async (req, res) => {
   const name = req.params.name;
   var query = `SELECT getGradByZup('${name}')`;
   try {
@@ -350,17 +350,17 @@ app.get('/api/getZupanija/:name', async (req, res) => {
       response.forEach((obj) => {
         obj.links = [
           {
-            href: `/api/get/${obj.id}`,
+            href: `/api/grad/${obj.id}`,
             rel: 'self',
             type: 'GET',
           },
           {
-            href: `/api/getCity/${obj.imegrada}`,
+            href: `/api/grad/ime/${obj.imegrada}`,
             rel: 'self',
             type: 'GET',
           },
           {
-            href: `/api/getBiggerThan/${obj.brojstanovnika - 1}`,
+            href: `/api/gradovi/populacija/${obj.brojstanovnika - 1}`,
             rel: 'related',
             type: 'GET',
           },
@@ -386,7 +386,7 @@ app.get('/api/getZupanija/:name', async (req, res) => {
   }
 });
 
-app.post('/api/add', validateRequestBody, async (req, res) => {
+app.post('/api/gradovi', validateRequestBody, async (req, res) => {
   var id;
   var queryGradovi = `INSERT INTO gradovi (
     imegrada, zupanija, gradonacelnik, brojstanovnika,
@@ -445,17 +445,17 @@ app.post('/api/add', validateRequestBody, async (req, res) => {
 
     response[0].links = [
       {
-        href: `/api/get/${response[0].id}`,
+        href: `/api/grad/${response[0].id}`,
         rel: 'self',
         type: 'GET',
       },
       {
-        href: `/api/getCity/${response[0].imegrada}`,
+        href: `/api/grad/ime/${response[0].imegrada}`,
         rel: 'self',
         type: 'GET',
       },
       {
-        href: `/api/getBiggerThan/${response[0].brojstanovnika - 1}`,
+        href: `/api/gradovi/populacija/${response[0].brojstanovnika - 1}`,
         rel: 'related',
         type: 'GET',
       },
@@ -475,7 +475,7 @@ app.post('/api/add', validateRequestBody, async (req, res) => {
   }
 });
 
-app.put('/api/modify/:id', validateUpdateRequestBody, async (req, res) => {
+app.put('/api/grad/:id', validateUpdateRequestBody, async (req, res) => {
   const id = req.params.id;
   var query = `UPDATE gradovi
   SET `;
@@ -498,7 +498,7 @@ app.put('/api/modify/:id', validateUpdateRequestBody, async (req, res) => {
     } else {
       const response = [
         {
-          href: `/api/get/${id}`,
+          href: `/api/grad/${id}`,
           rel: 'self',
           type: 'GET',
         },
@@ -520,7 +520,7 @@ app.put('/api/modify/:id', validateUpdateRequestBody, async (req, res) => {
   }
 });
 
-app.delete('/api/delete/:id', async (req, res) => {
+app.delete('/api/grad/:id', async (req, res) => {
   const id = req.params.id;
   var query = `DELETE FROM gradovi WHERE id = ${id}`;
   try {
@@ -554,11 +554,6 @@ app.get('/api/specification', async (req, res) => {
       'OpenApi specification /api/specification/html',
       OpenApi
     );
-});
-
-app.get('/api/specification/html', async (req, res) => {
-  const filePath = path.join(__dirname, '../openapi.html');
-  res.status(200).sendFile(filePath);
 });
 
 app.get('*', function (req, res) {
