@@ -22,9 +22,13 @@ const Profil = () => {
           <p>
             <strong>ID:</strong> {user.sub}
           </p>
+          <a href="/">Povratak</a>
         </div>
       ) : (
-        <p>Morate biti prijavljeni da biste vidjeli korisnički profil.</p>
+        <div>
+          <p>Morate biti prijavljeni da biste vidjeli korisnički profil. </p>
+          <a href="/">Povratak</a>
+        </div>
       )}
     </div>
   );

@@ -148,51 +148,76 @@ app.post('/getJson', async (req, res) => {
   }
 });
 
+function formatResponse(response) {
+  return response.map((obj) => {
+    const {
+      id,
+      imegrada,
+      kvartovi,
+      latitude,
+      povrsina,
+      zupanija,
+      longitude,
+      godinaosnutka,
+      gradonacelnik,
+      brojstanovnika,
+      nadmorskavisina,
+    } = obj;
+
+    obj.links = [
+      {
+        '@type': 'Link',
+        href: `/api/grad/${id}`,
+        rel: 'self',
+        type: 'GET',
+      },
+      {
+        '@type': 'Link',
+        href: `/api/grad/ime/${imegrada}`,
+        rel: 'self',
+        type: 'GET',
+      },
+      {
+        '@type': 'Link',
+        href: `/api/gradovi/populacija/${brojstanovnika - 1}`,
+        rel: 'related',
+        type: 'GET',
+      },
+    ];
+
+    return {
+      '@context': {
+        '@vocab': 'https://schema.org/',
+        id: 'identifier',
+        imegrada: 'name',
+        latitude: 'Latitude',
+        longitude: 'Longitude',
+        nadmorskavisina: 'Elevation',
+      },
+      '@type': 'City',
+      id: id,
+      imegrada: imegrada,
+      gradonacelnik: gradonacelnik,
+      zupanija: zupanija,
+      godinaosnutka: godinaosnutka,
+      brojstanovnika: brojstanovnika,
+      latitude: latitude,
+      longitude: longitude,
+      povrsina: povrsina,
+      nadmorskavisina: nadmorskavisina,
+      kvartovi: kvartovi,
+      links: obj.links,
+    };
+  });
+}
+
 app.get('/api/gradovi', async (req, res) => {
   var query = `SELECT * FROM gradovijson`;
   try {
     const result = await pool.query(query);
     var response = result.rows[0].json_agg;
-    console.log(response);
-    response.forEach((obj) => {
-      obj.links = [
-        {
-          '@type': 'Link',
-          href: `/api/grad/${obj.id}`,
-          rel: 'self',
-          type: 'GET',
-        },
-        {
-          '@type': 'Link',
-          href: `/api/grad/ime/${obj.imegrada}`,
-          rel: 'self',
-          type: 'GET',
-        },
-        {
-          '@type': 'Link',
-          href: `/api/gradovi/populacija/${obj.brojstanovnika - 1}`,
-          rel: 'related',
-          type: 'GET',
-        },
-      ];
-      obj['@type'] = 'City';
-
-      obj.latitude = {
-        '@type': 'Latitude',
-        value: obj.latitude,
-      };
-
-      obj.longitude = {
-        '@type': 'Longitude',
-        value: obj.longitude,
-      };
-
-      obj.nadmorskavisina = {
-        '@type': 'Elevation',
-        value: obj.nadmorskavisina,
-      };
-    });
-
+    // console.log(response);
+    response = formatResponse(response);
     res
       .status(200)
       .sendWrapper('OK', 'Fetched all entries from database', response);
@@ -223,39 +248,9 @@ app.get('/api/grad/:id', async (req, res) => {
           null
         );
     } else {
-      const response = result.rows[0].getgradbyid;
+      let response = result.rows[0].getgradbyid;
 
-      response[0].links = [
-        {
-          '@type': 'Link',
-          href: `/api/grad/ime/${response[0].imegrada}`,
-          rel: 'self',
-          type: 'GET',
-        },
-        {
-          '@type': 'Link',
-          href: `/api/gradovi/populacija/${response[0].brojstanovnika - 1}`,
-          rel: 'related',
-          type: 'GET',
-        },
-      ];
-
-      response[0]['@type'] = 'City';
-
-      response[0].latitude = {
-        '@type': 'Latitude',
-        value: response[0].latitude,
-      };
-
-      response[0].longitude = {
-        '@type': 'Longitude',
-        value: response[0].longitude,
-      };
-
-      response[0].nadmorskavisina = {
-        '@type': 'Elevation',
-        value: response[0].nadmorskavisina,
-      };
+      response = formatResponse([response[0]]);
 
       res
         .status(200)
@@ -293,44 +288,7 @@ app.get('/api/grad/ime/:name', async (req, res) => {
         );
     } else {
       var response = result.rows[0].getgradbyname;
-      response.forEach((obj) => {
-        obj.links = [
-          {
-            '@type': 'Link',
-            href: `/api/grad/${obj.id}`,
-            rel: 'self',
-            type: 'GET',
-          },
-          {
-            '@type': 'Link',
-            href: `/api/grad/ime/${obj.imegrada}`,
-            rel: 'self',
-            type: 'GET',
-          },
-          {
-            '@type': 'Link',
-            href: `/api/gradovi/populacija/${obj.brojstanovnika - 1}`,
-            rel: 'related',
-            type: 'GET',
-          },
-        ];
-        obj['@type'] = 'City';
-
-        obj.latitude = {
-          '@type': 'Latitude',
-          value: obj.latitude,
-        };
-
-        obj.longitude = {
-          '@type': 'Longitude',
-          value: obj.longitude,
-        };
-
-        obj.nadmorskavisina = {
-          '@type': 'Elevation',
-          value: obj.nadmorskavisina,
-        };
-      });
+      response = formatResponse(response);
 
       res
         .status(200)
@@ -368,45 +326,7 @@ app.get('/api/gradovi/populacija/:number', async (req, res) => {
         );
     } else {
       var response = result.rows[0].getgradbysize;
-      response.forEach((obj) => {
-        obj.links = [
-          {
-            '@type': 'Link',
-            href: `/api/grad/${obj.id}`,
-            rel: 'self',
-            type: 'GET',
-          },
-          {
-            '@type': 'Link',
-            href: `/api/grad/ime/${obj.imegrada}`,
-            rel: 'self',
-            type: 'GET',
-          },
-          {
-            '@type': 'Link',
-            href: `/api/gradovi/populacija/${obj.brojstanovnika - 1}`,
-            rel: 'related',
-            type: 'GET',
-          },
-        ];
-        obj['@type'] = 'City';
-
-        obj.latitude = {
-          '@type': 'Latitude',
-          value: obj.latitude,
-        };
-
-        obj.longitude = {
-          '@type': 'Longitude',
-          value: obj.longitude,
-        };
-
-        obj.nadmorskavisina = {
-          '@type': 'Elevation',
-          value: obj.nadmorskavisina,
-        };
-      });
-
+      response = formatResponse(response);
       res
         .status(200)
         .sendWrapper(
@@ -443,44 +363,8 @@ app.get('/api/zupanija/:name', async (req, res) => {
         );
     } else {
       var response = result.rows[0].getgradbyzup;
-      response.forEach((obj) => {
-        obj.links = [
-          {
-            '@type': 'Link',
-            href: `/api/grad/${obj.id}`,
-            rel: 'self',
-            type: 'GET',
-          },
-          {
-            '@type': 'Link',
-            href: `/api/grad/ime/${obj.imegrada}`,
-            rel: 'self',
-            type: 'GET',
-          },
-          {
-            '@type': 'Link',
-            href: `/api/gradovi/populacija/${obj.brojstanovnika - 1}`,
-            rel: 'related',
-            type: 'GET',
-          },
-        ];
-        obj['@type'] = 'City';
+      response = formatResponse(response);
 
-        obj.latitude = {
-          '@type': 'Latitude',
-          value: obj.latitude,
-        };
-
-        obj.longitude = {
-          '@type': 'Longitude',
-          value: obj.longitude,
-        };
-
-        obj.nadmorskavisina = {
-          '@type': 'Elevation',
-          value: obj.nadmorskavisina,
-        };
-      });
       res
         .status(200)
         .sendWrapper(
